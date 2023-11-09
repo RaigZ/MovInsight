@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MovInsight</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="API_Button">API Call</string>
+    <string name="enter_id">Enter ID</string>
+    <string name="enter_userid">Enter UserID</string>
+    <string name="enter_title">Enter Title</string>
+    <string name="enter_completed">Enter Completed</string>
+    <string name="add_data">Add</string>
+    <string name="delete_data">Delete</string>
+    <string name="back">Back</string>
+</resources>
