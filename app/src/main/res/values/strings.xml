@@ -9,4 +9,6 @@
     <string name="add_data">Add</string>
     <string name="delete_data">Delete</string>
     <string name="back">Back</string>
+    <string name="Login">Login</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

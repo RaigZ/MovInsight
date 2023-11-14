@@ -12,6 +12,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
+import com.example.movinsight.fragments.SignupFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,15 +34,16 @@ class MainActivity : AppCompatActivity() {
         //Creating fragment instances
         val APIFragment = ApiFragment()
         val DisplayFragment = DisplayFragment()
+        val SignupFragment = SignupFragment()
 
         //Testing
         val imdbAPI = APIService.imdbAPI
         //top10(imdbAPI)
         searchMovie(imdbAPI)
 
-        changeFragment(DisplayFragment)
+        changeFragment(SignupFragment)
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
+        /*findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.ic_api -> {
                     changeFragment(APIFragment)
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
+        }*/
     }
 
     private fun changeFragment(fragment: Fragment) {
