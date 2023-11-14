@@ -3,7 +3,10 @@ package com.example.movinsight
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.movinsight.API.APIInterface
 import com.example.movinsight.fragments.DisplayFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -12,13 +15,16 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
+import com.example.movinsight.fragments.LoginFragment
 import com.example.movinsight.fragments.SignupFragment
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
+    private val viewModel: MovInsightViewModel by viewModels()
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -31,17 +37,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        FirebaseApp.initializeApp(this)
+
+        //Testing ViewModel live data
+        viewModel.selectedItem.observe(this, Observer { item ->
+            Log.d("Testing live model", "$item")
+        })
+
         //Creating fragment instances
         val APIFragment = ApiFragment()
         val DisplayFragment = DisplayFragment()
         val SignupFragment = SignupFragment()
+        val LoginFragment = LoginFragment ()
 
         //Testing
         val imdbAPI = APIService.imdbAPI
         //top10(imdbAPI)
-        searchMovie(imdbAPI)
+        //searchMovie(imdbAPI)
 
-        changeFragment(SignupFragment)
+        changeFragment(DisplayFragment)
+
+        findViewById<Button>(R.id.signupButton).setOnClickListener {
+            changeFragment(SignupFragment)
+        }
+
+        findViewById<Button>(R.id.loginButton).setOnClickListener {
+            changeFragment(LoginFragment)
+        }
 
         /*findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
             when(item.itemId){
