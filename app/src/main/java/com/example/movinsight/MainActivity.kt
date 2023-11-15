@@ -3,21 +3,32 @@ package com.example.movinsight
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.movinsight.API.APIInterface
 import com.example.movinsight.fragments.DisplayFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
+import com.example.movinsight.fragments.LoginFragment
+import com.example.movinsight.fragments.SignupFragment
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
-
+    private val viewModel: MovInsightViewModel by viewModels()
+    private val userModel: UserViewModel by viewModels()
+    private lateinit var auth: FirebaseAuth
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -26,22 +37,86 @@ class MainActivity : AppCompatActivity() {
             .create(APIInterface::class.java)
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //If user is still logged in, display email(*username later), and change visibility for login/signup
+        auth = Firebase.auth
+        val currentUser = auth.currentUser
+        if(currentUser != null){
+            findViewById<Button>(R.id.loginButton).visibility = View.GONE
+            findViewById<Button>(R.id.signupButton).visibility = View.GONE
+            findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
+            var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
+            usernameField.visibility = View.VISIBLE
+            usernameField.text = auth.currentUser!!.email.toString()
+        }
+
         //Creating fragment instances
         val APIFragment = ApiFragment()
         val DisplayFragment = DisplayFragment()
+        val SignupFragment = SignupFragment()
+        val LoginFragment = LoginFragment ()
 
-        //Testing
+        //UserViewModel, waits for a Map<String, Any> map to be returned
+        userModel.selectedItem.observe(this, Observer { item ->
+            var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
+            usernameField.visibility = View.VISIBLE
+            usernameField.text = item.get("username").toString()
+            Log.d("Testing user model", "$item")
+        })
+
+        //ViewModel, waits for a FirebaseAuth object to be returned
+        viewModel.selectedItem.observe(this, Observer { item ->
+            Log.d("Testing live model", "$item")
+            changeFragment(DisplayFragment)
+
+            //Once main activity receives FirebaseAuth, display current user information
+            //Change visibility for login/signup buttons
+            if(item.currentUser != null){
+                findViewById<Button>(R.id.loginButton).visibility = View.GONE
+                findViewById<Button>(R.id.signupButton).visibility = View.GONE
+                findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
+            }
+        })
+
+        //API service for IMDB, was testing top10, and search movies
         val imdbAPI = APIService.imdbAPI
         //top10(imdbAPI)
-        searchMovie(imdbAPI)
+        //searchMovie(imdbAPI)
 
         changeFragment(DisplayFragment)
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
+        findViewById<Button>(R.id.signupButton).setOnClickListener {
+            changeFragment(SignupFragment)
+        }
+
+        findViewById<Button>(R.id.loginButton).setOnClickListener {
+            changeFragment(LoginFragment)
+        }
+
+        //Signout button, if user clicks on signout, revert visibility for signup/login buttons
+        //Set visibility for signout button to be GONE
+        var signoutButton = findViewById<Button>(R.id.signoutButton)
+        if(signoutButton.visibility == View.VISIBLE){
+            signoutButton.setOnClickListener {
+                auth.signOut()
+                signoutButton.visibility = View.GONE
+                findViewById<Button>(R.id.loginButton).visibility = View.VISIBLE
+                findViewById<Button>(R.id.signupButton).visibility = View.VISIBLE
+                var usernameField = findViewById<TextView>(R.id.usernameField)
+                usernameField.visibility = View.GONE
+                usernameField.text = ""
+            }
+        }
+
+        //Used for the bottom nav that will be implemented
+        /*findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.ic_api -> {
                     changeFragment(APIFragment)
@@ -53,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
-        }
+        }*/
     }
 
     private fun changeFragment(fragment: Fragment) {

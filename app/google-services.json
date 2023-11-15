@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "806952984085",
-    "project_id": "movinsight",
-    "storage_bucket": "movinsight.appspot.com"
+    "project_number": "214976087030",
+    "project_id": "movinsight-4950f",
+    "storage_bucket": "movinsight-4950f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:806952984085:android:a84acaa2c89ed0cf7ff81c",
+        "mobilesdk_app_id": "1:214976087030:android:a7e0588692ef69b9db7dd7",
         "android_client_info": {
           "package_name": "com.example.movinsight"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDQl5U_CiYilLK33JKJdBre7bc9REOM5zU"
+          "current_key": "AIzaSyCJeQ0BgcFpGgQ-66nNoMGM6KHwYwye9Mg"
         }
       ],
       "services": {
