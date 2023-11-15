@@ -1,16 +1,19 @@
 package com.example.movinsight.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import com.example.movinsight.API.FirestoreService
+import com.example.movinsight.UserViewModel
 import com.example.movinsight.MovInsightViewModel
 import com.example.movinsight.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,8 +29,11 @@ class SignupFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    //View model
+    private lateinit var auth: FirebaseAuth
+    private var db = FirestoreService
+    //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var root: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +42,7 @@ class SignupFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        auth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
@@ -52,7 +59,9 @@ class SignupFragment : Fragment() {
         root.findViewById<Button>(R.id.submitSignup).setOnClickListener {
             val email = root.findViewById<TextInputEditText>(R.id.emailInputSignup).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputSignup).text.toString()
-            //Make call to signup function here
+
+            //Signup with email + password
+            signUp(email, password)
         }
     }
 
@@ -72,6 +81,22 @@ class SignupFragment : Fragment() {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+
+    private fun signUp(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener() { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d("FirebaseService", "Created user with email/password successfully")
+                    viewModel.selectItem(auth)
+                    //Need to save user first then pass through userViewModel
+                    //db.getUser(email, userViewModel)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.d("FirebaseService", "Signup with email/password unsuccessful", task.exception)
                 }
             }
     }

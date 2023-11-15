@@ -7,16 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
+import com.example.movinsight.API.FirestoreService
+import com.example.movinsight.UserViewModel
 import com.example.movinsight.MovInsightViewModel
 import com.example.movinsight.R
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.auth
-import kotlin.math.log
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +30,10 @@ class LoginFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
-    //private var firebaseService = FirebaseService()
+    private var db = FirestoreService
+    //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
     private lateinit var root: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,16 +96,18 @@ class LoginFragment : Fragment() {
         Log.d("FirebaseService", "${auth.currentUser}")
         //If user is logged in, return because we will raise an exception if we try authenticating when user is already logged in
         if(auth.currentUser != null){
-            //Send the viewmodel the Auth object(*make call to firebase to retrieve user details based on query)
+            //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
             viewModel.selectItem(auth)
+            db.getUser(email, userViewModel)
             return
         }
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
-                    //Send the viewmodel the Auth object(*make call to firebase to retrieve user details based on query)
-                    viewModel.selectItem(auth)
+                    //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
                     Log.d("FirebaseService", "login with email/password: Success!")
+                    viewModel.selectItem(auth)
+                    db.getUser(email, userViewModel)
                 } else {
                     Log.d("FirebaseService", "Login with email/password: Failed!", task.exception)
                 }

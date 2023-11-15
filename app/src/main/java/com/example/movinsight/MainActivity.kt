@@ -1,6 +1,5 @@
 package com.example.movinsight
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.movinsight.API.APIInterface
 import com.example.movinsight.fragments.DisplayFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
@@ -21,7 +19,6 @@ import com.example.movinsight.API.TopMovieResponse
 import com.example.movinsight.fragments.LoginFragment
 import com.example.movinsight.fragments.SignupFragment
 import com.google.firebase.Firebase
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import retrofit2.Call
@@ -30,6 +27,7 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private val viewModel: MovInsightViewModel by viewModels()
+    private val userModel: UserViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
@@ -65,7 +63,15 @@ class MainActivity : AppCompatActivity() {
         val SignupFragment = SignupFragment()
         val LoginFragment = LoginFragment ()
 
-        //ViewModel, waits for a FirebaseAuth object to be received
+        //UserViewModel, waits for a Map<String, Any> map to be returned
+        userModel.selectedItem.observe(this, Observer { item ->
+            var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
+            usernameField.visibility = View.VISIBLE
+            usernameField.text = item.get("username").toString()
+            Log.d("Testing user model", "$item")
+        })
+
+        //ViewModel, waits for a FirebaseAuth object to be returned
         viewModel.selectedItem.observe(this, Observer { item ->
             Log.d("Testing live model", "$item")
             changeFragment(DisplayFragment)
@@ -76,9 +82,6 @@ class MainActivity : AppCompatActivity() {
                 findViewById<Button>(R.id.loginButton).visibility = View.GONE
                 findViewById<Button>(R.id.signupButton).visibility = View.GONE
                 findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
-                var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
-                usernameField.visibility = View.VISIBLE
-                usernameField.text = auth.currentUser!!.email.toString()
             }
         })
 
