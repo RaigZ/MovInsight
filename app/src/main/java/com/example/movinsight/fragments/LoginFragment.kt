@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import com.example.movinsight.MovInsightViewModel
 import com.example.movinsight.R
@@ -65,23 +66,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        root.findViewById<Button>(R.id.testButton).setOnClickListener {
-            //firebaseService.logOut()
-            FirebaseAuth.getInstance().signOut()
-            //auth.signOut()
-            //logOut()
-        }
-
         root.findViewById<Button>(R.id.submitLogin).setOnClickListener {
             val email = root.findViewById<TextInputEditText>(R.id.emailInputLogin).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputLogin).text.toString()
-            //firebaseService.signIn(email, password)
             signIn(email, password)
-            //val user = firebaseService.getUser()
-            //viewModel.selectItem(user)
-            if(auth.currentUser != null){
-                viewModel.selectItem(auth.currentUser!!)
-            }
         }
     }
 
@@ -107,14 +95,18 @@ class LoginFragment : Fragment() {
 
     private fun signIn(email: String, password: String) {
         Log.d("FirebaseService", "${auth.currentUser}")
+        //If user is logged in, return because we will raise an exception if we try authenticating when user is already logged in
         if(auth.currentUser != null){
+            //Send the viewmodel the Auth object(*make call to firebase to retrieve user details based on query)
+            viewModel.selectItem(auth)
             return
         }
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
+                    //Send the viewmodel the Auth object(*make call to firebase to retrieve user details based on query)
+                    viewModel.selectItem(auth)
                     Log.d("FirebaseService", "login with email/password: Success!")
-                    //user = auth.currentUser
                 } else {
                     Log.d("FirebaseService", "Login with email/password: Failed!", task.exception)
                 }

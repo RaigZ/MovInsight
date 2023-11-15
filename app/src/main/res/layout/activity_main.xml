@@ -22,7 +22,7 @@
         android:layout_width="100dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
-        android:text="Login"
+        android:text="@string/login"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="@+id/signupButton"
         app:layout_constraintStart_toEndOf="@+id/signupButton"
@@ -35,7 +35,7 @@
         android:layout_width="100dp"
         android:layout_height="46dp"
         android:layout_marginTop="16dp"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.591"
@@ -74,7 +74,7 @@
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent">
@@ -98,5 +98,33 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/usernameField"
+        android:layout_width="125dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/signoutButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="125dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="16dp"
+        android:text="Sign out"
+        android:visibility="gone"
+        app:cornerRadius="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

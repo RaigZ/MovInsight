@@ -52,12 +52,7 @@ class SignupFragment : Fragment() {
         root.findViewById<Button>(R.id.submitSignup).setOnClickListener {
             val email = root.findViewById<TextInputEditText>(R.id.emailInputSignup).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputSignup).text.toString()
-            //firebaseService.signUp(email, password)
-            //val user = firebaseService.getUser()
-            //viewModel.selectItem(user)
-            /*if(user != null){
-                viewModel.selectItem(user)
-            }*/
+            //Make call to signup function here
         }
     }
 
