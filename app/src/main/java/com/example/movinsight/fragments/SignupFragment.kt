@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.movinsight.API.FirestoreService
 import com.example.movinsight.UserViewModel
@@ -14,6 +15,7 @@ import com.example.movinsight.MovInsightViewModel
 import com.example.movinsight.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import org.w3c.dom.Text
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -57,11 +59,14 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         root.findViewById<Button>(R.id.submitSignup).setOnClickListener {
+            val username = root.findViewById<TextInputEditText>(R.id.usernameInputSignup).text.toString()
             val email = root.findViewById<TextInputEditText>(R.id.emailInputSignup).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputSignup).text.toString()
 
-            //Signup with email + password
-            signUp(email, password)
+            if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty())
+                signUp(username, email, password)
+            else
+                Toast.makeText(context, "Please fill every field", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -85,17 +90,21 @@ class SignupFragment : Fragment() {
             }
     }
 
-    private fun signUp(email: String, password: String) {
+    private fun signUp(username: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("FirebaseService", "Created user with email/password successfully")
-                    viewModel.selectItem(auth)
+                    //viewModel.selectItem(auth)
+                    root.findViewById<TextInputEditText>(R.id.usernameInputSignup).setText("")
+                    root.findViewById<TextInputEditText>(R.id.emailInputSignup).setText("")
+                    root.findViewById<TextInputEditText>(R.id.passwordInputSignup).setText("")
                     //Need to save user first then pass through userViewModel
-                    //db.getUser(email, userViewModel)
+                    db.createUser(username, email, userViewModel, requireContext())
                 } else {
                     // If sign in fails, display a message to the user.
+                    Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()
                     Log.d("FirebaseService", "Signup with email/password unsuccessful", task.exception)
                 }
             }

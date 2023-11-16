@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.example.movinsight.API.FirestoreService
 import com.example.movinsight.UserViewModel
@@ -68,7 +69,11 @@ class LoginFragment : Fragment() {
         root.findViewById<Button>(R.id.submitLogin).setOnClickListener {
             val email = root.findViewById<TextInputEditText>(R.id.emailInputLogin).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputLogin).text.toString()
-            signIn(email, password)
+
+            if(!email.isEmpty() && !password.isEmpty())
+                signIn(email, password)
+            else
+                Toast.makeText(context, "Please fill every field", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -97,7 +102,7 @@ class LoginFragment : Fragment() {
         //If user is logged in, return because we will raise an exception if we try authenticating when user is already logged in
         if(auth.currentUser != null){
             //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
-            viewModel.selectItem(auth)
+            //viewModel.selectItem(auth)
             db.getUser(email, userViewModel)
             return
         }
@@ -106,9 +111,12 @@ class LoginFragment : Fragment() {
                 if(task.isSuccessful) {
                     //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
                     Log.d("FirebaseService", "login with email/password: Success!")
-                    viewModel.selectItem(auth)
+                    root.findViewById<TextInputEditText>(R.id.emailInputLogin).setText("")
+                    root.findViewById<TextInputEditText>(R.id.passwordInputLogin).setText("")
+                    //viewModel.selectItem(auth)
                     db.getUser(email, userViewModel)
                 } else {
+                    Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()
                     Log.d("FirebaseService", "Login with email/password: Failed!", task.exception)
                 }
             }
