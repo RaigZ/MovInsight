@@ -45,9 +45,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //If user is still logged in, display email(*username later), and change visibility for login/signup
+        //If user is still logged in, display email(*username later),
+        //and change visibility for login/signup/sign-out buttons
         auth = Firebase.auth
         val currentUser = auth.currentUser
+
+        //When room is implemented check if currentUser == user in room.
         if(currentUser != null){
             findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
@@ -65,24 +68,19 @@ class MainActivity : AppCompatActivity() {
 
         //UserViewModel, waits for a Map<String, Any> map to be returned
         userModel.selectedItem.observe(this, Observer { item ->
-            var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
+            var usernameField = findViewById<TextView>(R.id.usernameField)
             usernameField.visibility = View.VISIBLE
-            usernameField.text = item.get("username").toString()
-            Log.d("Testing user model", "$item")
-        })
+            usernameField.text = item["username"].toString()
 
-        //ViewModel, waits for a FirebaseAuth object to be returned
-        viewModel.selectedItem.observe(this, Observer { item ->
-            Log.d("Testing live model", "$item")
+            //Change visibility for login/sign-up/sign-out buttons
+            findViewById<Button>(R.id.loginButton).visibility = View.GONE
+            findViewById<Button>(R.id.signupButton).visibility = View.GONE
+            findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
+
+            //Change this to MainFragment
             changeFragment(DisplayFragment)
 
-            //Once main activity receives FirebaseAuth, display current user information
-            //Change visibility for login/signup buttons
-            if(item.currentUser != null){
-                findViewById<Button>(R.id.loginButton).visibility = View.GONE
-                findViewById<Button>(R.id.signupButton).visibility = View.GONE
-                findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
-            }
+            Log.d("UserViewModel", "$item")
         })
 
         //API service for IMDB, was testing top10, and search movies
@@ -103,14 +101,19 @@ class MainActivity : AppCompatActivity() {
         //Signout button, if user clicks on signout, revert visibility for signup/login buttons
         //Set visibility for signout button to be GONE
         var signoutButton = findViewById<Button>(R.id.signoutButton)
-        if(signoutButton.visibility == View.VISIBLE){
-            signoutButton.setOnClickListener {
+        var usernameField = findViewById<TextView>(R.id.usernameField)
+
+        //if(signoutButton.visibility == View.VISIBLE){}
+        signoutButton.setOnClickListener {
+            if(signoutButton.visibility == View.VISIBLE){
+                //Log out of firebase auth provider
                 auth.signOut()
-                signoutButton.visibility = View.GONE
-                findViewById<Button>(R.id.loginButton).visibility = View.VISIBLE
+
+                //Change visibility for login/sign-up/sign-out buttons
                 findViewById<Button>(R.id.signupButton).visibility = View.VISIBLE
-                var usernameField = findViewById<TextView>(R.id.usernameField)
+                findViewById<Button>(R.id.loginButton).visibility = View.VISIBLE
                 usernameField.visibility = View.GONE
+                signoutButton.visibility = View.GONE
                 usernameField.text = ""
             }
         }

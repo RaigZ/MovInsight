@@ -1,8 +1,11 @@
 package com.example.movinsight.API
 
+import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import com.example.movinsight.UserViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
@@ -22,20 +25,38 @@ class FirestoreService {
                         if(query != null){
                             val user = buildMap<String, Any>{
                                 put("email", query.get("email")!!)
-                                put("password", query.get("password")!!)
+                                //put("password", query.get("password")!!)
                                 put("username", query.get("username")!!)
+                                put("watchlist", query.get("watchlist")!!)
                             }
                             viewModel.selectItem(user)
                         }
                         //Log.d("FirestoreService file", "${task.result.documents}")
                     } else {
+                        Firebase.auth.signOut()
                         Log.d("FirestoreService file", "not successfull")
                     }
                 }
         }
 
         //Function call to create user in Firestore storage
-        fun createUser(email: String, viewModel: UserViewModel){}
+        fun createUser(username: String, email: String, viewModel: UserViewModel, context: Context){
+            val user = buildMap<String, Any>{
+                put("username", username)
+                put("email", email)
+                put("watchlist", ArrayList<String>())
+            }
+            db.collection("users")
+                .add(user)
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Account creation Success!", Toast.LENGTH_LONG).show()
+                    viewModel.selectItem(user)
+                }
+                .addOnFailureListener {
+                    Firebase.auth.signOut()
+                    Toast.makeText(context, "Account creation failed!", Toast.LENGTH_LONG).show()
+                }
+        }
     }
 
 }
