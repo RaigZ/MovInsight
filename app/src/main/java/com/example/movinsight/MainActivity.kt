@@ -1,5 +1,6 @@
 package com.example.movinsight
 
+import ProfileFragment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity() {
         val DisplayFragment = DisplayFragment()
         val SignupFragment = SignupFragment()
         val LoginFragment = LoginFragment ()
+        val ProfileFragment = ProfileFragment ()
 
         //UserViewModel, waits for a Map<String, Any> map to be returned
         userModel.selectedItem.observe(this, Observer { item ->

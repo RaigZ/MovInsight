@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- fragment_profile.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/usernameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Username" />
+
+    <TextView
+        android:id="@+id/emailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/usernameTV"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:text="Email" />
+
+    <TextView
+        android:id="@+id/watchlistTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailTV"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true"
+        android:text="Watchlist" />
+</RelativeLayout>
