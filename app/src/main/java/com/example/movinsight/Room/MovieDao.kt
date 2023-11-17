@@ -7,13 +7,15 @@ import kotlinx.coroutines.flow.Flow
 interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMovie(movie: Movie) // Inserts a movie
+    fun insertMovie(movie: Movie) // Inserts a movie
 
     @Delete
-    suspend fun deleteMovie(movie: Movie) // Deletes a movie
+    fun deleteMovie(movie: Movie) // Deletes a movie
 
     @Query("SELECT * FROM movie WHERE id = :id")
-    fun getMovie(id: String) : Flow<Movie> // Gets movie based on ID
+    fun getMovie(id: String) : Movie // Gets movie based on given ID
+
+
 
     // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
     @Update
@@ -21,6 +23,6 @@ interface MovieDao {
 
     // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
     @Query("SELECT * FROM movie")
-    fun getAllMovies(): Flow<List<Movie>> // Loads all movies
+    fun getAllMovies(): List<Movie> // Loads all movies
 
 }
