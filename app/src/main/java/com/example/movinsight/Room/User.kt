@@ -1,18 +1,17 @@
 package com.example.movinsight.Room
 
+import androidx.room.PrimaryKey
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
 @Entity(tableName = "user")
-data class User(
-    @PrimaryKey val username: String, // User name
-    @ColumnInfo(name = "email") val email: String, // User email
-    @ColumnInfo(name = "watchlist") val watchlist: ArrayList<String> // User watchlist
+data class User (
+    @PrimaryKey @ColumnInfo(name = "username") val username: String,
+    @ColumnInfo(name = "email") val email: String,
+    @ColumnInfo(name = "watchlist") val watchlist: String
 
-
-
-    // old columns
-    //@ColumnInfo(name = "date") val date: String, // Join date of user
-    //@ColumnInfo(name = "bio") val description: String, // User bio
+    /*
+    // this data type doesn't seem to work
+    @ColumnInfo(name = "watchlist") val watchlist: ArrayList<String>
+    */
 )

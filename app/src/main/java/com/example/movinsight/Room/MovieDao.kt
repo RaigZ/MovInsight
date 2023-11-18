@@ -1,28 +1,20 @@
 package com.example.movinsight.Room
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovieDao {
 
+    // Inserts movie into database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovie(movie: Movie) // Inserts a movie
+    fun insertMovie(movie: Movie)
 
+    // Deletes movie from database
     @Delete
-    fun deleteMovie(movie: Movie) // Deletes a movie
+    fun deleteMovie(movie: Movie)
 
+    // Gets a movie from database based on given ID
     @Query("SELECT * FROM movie WHERE id = :id")
-    fun getMovie(id: String) : Movie // Gets movie based on given ID
-
-
-
-    // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
-    @Update
-    fun updateMovie(movie: Movie) // Updates a movie
-
-    // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
-    @Query("SELECT * FROM movie")
-    fun getAllMovies(): List<Movie> // Loads all movies
+    fun getMovie(id: String) : Movie
 
 }

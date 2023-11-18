@@ -3,8 +3,6 @@ package com.example.movinsight.API
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import com.example.movinsight.Room.UserDao
-import com.example.movinsight.Room.UserDatabase
 import com.example.movinsight.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -13,6 +11,8 @@ import com.google.firebase.firestore.firestore
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.movinsight.Room.User
+import com.example.movinsight.Room.UserDao
+import com.example.movinsight.Room.UserDatabase
 
 class FirestoreService {
 
@@ -43,7 +43,7 @@ class FirestoreService {
                             userDao = userDB.userDao() // Get UserDao
                             val roomUser = User(query.get("email") as String, // Create user based on info
                                 query.get("username") as String,
-                                query.get("watchlist") as ArrayList<String>)
+                                query.get("watchlist") as String) // should be "as ArrayList<String>
                             userDao.insertUser(roomUser) // Insert user into UserDatabase
                         }
                         //Log.d("FirestoreService file", "${task.result.documents}")

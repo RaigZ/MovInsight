@@ -1,29 +1,20 @@
 package com.example.movinsight.Room
 
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
 
+    // Inserts user into database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User) // Inserts a user
+    fun insertUser(user: User)
 
-    @Query("SELECT * FROM user WHERE username = :username")
-    fun getUser(username: String) : Flow<String> // Gets user based on given username
-
-
-
-    // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
-    @Update
-    fun updateUser(user: User) // Updates a user
-
-    // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
+    // Deletes user from database
     @Delete
-    fun deleteUser(user: User) // Deletes a user
+    fun deleteUser(user: User)
 
-    // PROBABLY NOT NEEDED - MOSTLY FOR UNIT TESTING
-    @Query("SELECT * FROM user")
-    fun loadAllUsers(): List<User> // Loads all users
+    // Gets a user from database based on given username
+    @Query("SELECT * FROM user WHERE username = :username")
+    fun getUser(username: String) : User
 
 }
