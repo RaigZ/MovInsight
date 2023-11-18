@@ -17,4 +17,11 @@ interface MovieDao {
     @Query("SELECT * FROM movie WHERE id = :id")
     fun getMovie(id: String) : Movie
 
+
+
+    //// FOR UNIT TESTING
+
+    // Gets all movies
+    @Query("SELECT * FROM movie")
+    fun getAllMovies(): List<Movie>
 }

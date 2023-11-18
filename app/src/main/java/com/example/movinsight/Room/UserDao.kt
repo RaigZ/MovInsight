@@ -7,7 +7,7 @@ interface UserDao {
 
     // Inserts user into database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    suspend fun insertUser(user: User)
 
     // Deletes user from database
     @Delete
@@ -16,5 +16,13 @@ interface UserDao {
     // Gets a user from database based on given username
     @Query("SELECT * FROM user WHERE username = :username")
     fun getUser(username: String) : User
+
+
+
+    //// FOR UNIT TESTING
+
+    // Gets all users
+    @Query("SELECT * FROM user")
+    fun getAllUsers(): List<User>
 
 }

@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.room.Room
 import com.example.movinsight.API.APIInterface
 import com.example.movinsight.fragments.DisplayFragment
 import retrofit2.Retrofit
@@ -16,11 +18,14 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
+import com.example.movinsight.Room.User
+import com.example.movinsight.Room.UserDatabase
 import com.example.movinsight.fragments.LoginFragment
 import com.example.movinsight.fragments.SignupFragment
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -132,6 +137,12 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }*/
+
+
+        // testing Room
+        findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
+            addUserToRoom()
+        }
     }
 
     private fun changeFragment(fragment: Fragment) {
@@ -191,4 +202,18 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+
+    // Testing the Room database
+    private fun addUserToRoom() {
+        val db = Room.databaseBuilder(
+            applicationContext,
+            UserDatabase::class.java, "user"
+        ).build()
+        val userDao = db.userDao()
+        val user = User("heisenberg", "oneWhoKnocks@gmail.com", "chemistry")
+        lifecycleScope.launch { // coroutine on Main
+            userDao.insertUser(user)
+        }
+        //userDao.insertUser(user)
+    }
 }
