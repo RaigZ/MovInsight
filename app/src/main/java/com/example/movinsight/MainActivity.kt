@@ -139,9 +139,11 @@ class MainActivity : AppCompatActivity() {
         }*/
 
 
-        // testing Room
+        // testing Room!!!!!!!!!!!!!
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
-            addUserToRoom()
+            lifecycleScope.launch { // coroutine on Main
+                addUserToRoom()
+            }
         }
     }
 
@@ -204,16 +206,15 @@ class MainActivity : AppCompatActivity() {
 
 
     // Testing the Room database
-    private fun addUserToRoom() {
+    private suspend fun addUserToRoom() {
         val db = Room.databaseBuilder(
             applicationContext,
             UserDatabase::class.java, "user"
         ).build()
         val userDao = db.userDao()
-        val user = User("heisenberg", "oneWhoKnocks@gmail.com", "chemistry")
-        lifecycleScope.launch { // coroutine on Main
-            userDao.insertUser(user)
-        }
-        //userDao.insertUser(user)
+        val user1 = User("heisenberg", "oneWhoKnocks@gmail.com", "chemistry")
+        //val user2 = User("pinkman", "chiliPowder@gmail.com", "chemistry")
+        userDao.insertUser(user1)
+        //userDao.deleteUser(userDao.getAllUsers()[0])
     }
 }

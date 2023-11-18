@@ -11,11 +11,11 @@ interface UserDao {
 
     // Deletes user from database
     @Delete
-    fun deleteUser(user: User)
+    suspend fun deleteUser(user: User)
 
     // Gets a user from database based on given username
     @Query("SELECT * FROM user WHERE username = :username")
-    fun getUser(username: String) : User
+    suspend fun getUser(username: String) : User
 
 
 
@@ -23,6 +23,6 @@ interface UserDao {
 
     // Gets all users
     @Query("SELECT * FROM user")
-    fun getAllUsers(): List<User>
+    suspend fun getAllUsers(): List<User>
 
 }
