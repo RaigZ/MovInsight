@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         // testing Room!!!!!!!!!!!!!
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
             lifecycleScope.launch { // coroutine on Main
-                addUserToRoom()
+                roomTests()
             }
         }
     }
@@ -204,17 +204,20 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-
+    // Note to self: The database only opens when a change is made
     // Testing the Room database
-    private suspend fun addUserToRoom() {
+    private suspend fun roomTests() {
         val db = Room.databaseBuilder(
             applicationContext,
             UserDatabase::class.java, "user"
         ).build()
         val userDao = db.userDao()
-        val user1 = User("heisenberg", "oneWhoKnocks@gmail.com", "chemistry")
-        //val user2 = User("pinkman", "chiliPowder@gmail.com", "chemistry")
-        userDao.insertUser(user1)
-        //userDao.deleteUser(userDao.getAllUsers()[0])
+
+        var watchlist = ArrayList<String>()
+        watchlist.add("movie1")
+        watchlist.add("movie2")
+        watchlist.add("movie3")
+        val test = User("username", "email", watchlist)
+        userDao.insertUser(test)
     }
 }

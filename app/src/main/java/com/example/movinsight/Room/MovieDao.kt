@@ -7,15 +7,15 @@ interface MovieDao {
 
     // Inserts movie into database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovie(movie: Movie)
+    suspend fun insertMovie(movie: Movie)
 
     // Deletes movie from database
     @Delete
-    fun deleteMovie(movie: Movie)
+    suspend fun deleteMovie(movie: Movie)
 
     // Gets a movie from database based on given ID
     @Query("SELECT * FROM movie WHERE id = :id")
-    fun getMovie(id: String) : Movie
+    suspend fun getMovie(id: String) : Movie
 
 
 
@@ -23,5 +23,5 @@ interface MovieDao {
 
     // Gets all movies
     @Query("SELECT * FROM movie")
-    fun getAllMovies(): List<Movie>
+    suspend fun getAllMovies(): List<Movie>
 }

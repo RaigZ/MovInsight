@@ -3,7 +3,9 @@ package com.example.movinsight.API
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.example.movinsight.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -40,22 +42,13 @@ class FirestoreService {
                             }
                             viewModel.selectItem(user)
 
-                            // Insert user into the Room database
                             /*
-                            lifecycleScope.UserViewModel {
+                            // Insert user into the Room database (unsure if this will work, needs testing)
+                            viewModel.viewModelScope.launch {
                                 addUserToRoomDB(query.get("email") as String,
                                     query.get("username") as String,
-                                    query.get("watchlist") as String)
+                                    query.get("watchlist") as ArrayList<String>)
                             }
-                            */
-                            /*
-                            val context = ApplicationProvider.getApplicationContext<Context>() // Get context
-                            userDB = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build() // Get UserDatabase
-                            userDao = userDB.userDao() // Get UserDao
-                            val roomUser = User(query.get("email") as String, // Create user based on info
-                                query.get("username") as String,
-                                query.get("watchlist") as String) // should be "as ArrayList<String>
-                            userDao.insertUser(roomUser) // Insert user into UserDatabase
                             */
                         }
                         //Log.d("FirestoreService file", "${task.result.documents}")
@@ -85,12 +78,13 @@ class FirestoreService {
                 }
         }
 
-        private suspend fun addUserToRoomDB(email: String, username: String, watchlist: String)
+        // Adds user to User database
+        private suspend fun addUserToRoomDB(email: String, username: String, watchlist: ArrayList<String>)
         {
             val context = ApplicationProvider.getApplicationContext<Context>() // Get context
             userDB = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build() // Get UserDatabase
             userDao = userDB.userDao() // Get UserDao
-            val roomUser = User(email, username, watchlist)
+            val roomUser = User(email, username, watchlist) // Create user based on given info
             userDao.insertUser(roomUser) // Insert user into UserDatabase
         }
     }

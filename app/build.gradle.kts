@@ -66,6 +66,7 @@ dependencies {
     kapt("androidx.room:room-compiler:2.6.0")//2.2.5
     //kapt("android.arch.persistence.room:compiler:1.1.1")//1.1.1
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("com.google.code.gson:gson:2.8.6")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
