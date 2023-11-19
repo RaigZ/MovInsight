@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#68667275"
     tools:context=".MainActivity">
 
     <!--
@@ -22,31 +23,39 @@
         android:layout_width="100dp"
         android:layout_height="46dp"
         android:layout_marginStart="16dp"
+        android:backgroundTint="#42CD95"
         android:text="@string/login"
-        app:cornerRadius="0dp"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/signupButton"
         app:layout_constraintStart_toEndOf="@+id/signupButton"
         app:layout_constraintTop_toTopOf="@+id/signupButton"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:strokeColor="#000000" />
 
     <Button
         android:id="@+id/signupButton"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="100dp"
         android:layout_height="46dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#42CD95"
         android:text="@string/sign_up"
-        app:cornerRadius="0dp"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
+        app:iconTint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.591"
+        app:layout_constraintHorizontal_bias="0.543"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#000000" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="80dp"
+        android:backgroundTint="#FDFDFD"
         app:layout_constraintBottom_toTopOf="@id/guidelineBottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="650dp" />
+        app:layout_constraintGuide_percent="0.89056087" />
 
     <!--Bottom Navbar-->
 
@@ -85,12 +94,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                app:backgroundTint="#98989c"
                 app:menu="@menu/bottom_navbar"
                 app:navigationIcon="@drawable/ic_menu_24" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:backgroundTint="#42CD95"
                 app:layout_anchor="@id/bottomAppBar"
                 app:srcCompat="@drawable/ic_add" />
 
@@ -129,31 +140,23 @@
 
     <Button
         android:id="@+id/bAddToRoom"
-        android:layout_width="140dp"
-        android:layout_height="33dp"
-        android:backgroundTint="#A13232"
-        android:text="Room Test"
-        android:textAlignment="center"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/bPermissionsTest"
-        app:layout_constraintEnd_toStartOf="@+id/signupButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/bPermissionsTest"
-        android:layout_width="150dp"
-        android:layout_height="33dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="#569E5F"
-        android:text="Permissions Test"
-        android:textAlignment="center"
-        android:textSize="12sp"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="152dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#42CD95"
+        android:text="Add To Room"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
+        app:iconPadding="10dp"
+        app:iconTint="#000000"
         app:layout_constraintBottom_toTopOf="@+id/fContainer"
         app:layout_constraintEnd_toStartOf="@+id/signupButton"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.411"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.727"
+        app:strokeColor="#000000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,11 +50,14 @@
 
         <Button
             android:id="@+id/submitLogin"
-            style="?attr/materialButtonOutlinedStyle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:backgroundTint="#000000"
             android:text="@string/login"
+            android:textColor="#42CD95"
+            app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputLoginLayout"
             app:layout_constraintStart_toStartOf="@+id/passwordInputLoginLayout"
             app:layout_constraintTop_toBottomOf="@id/passwordInputLoginLayout" />

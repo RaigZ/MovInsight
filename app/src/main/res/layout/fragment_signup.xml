@@ -70,11 +70,14 @@
 
         <Button
             android:id="@+id/submitSignup"
-            style="?attr/materialButtonOutlinedStyle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:backgroundTint="#070707"
             android:text="@string/sign_up"
+            android:textColor="#42CD95"
+            app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputSignupLayout"
             app:layout_constraintStart_toStartOf="@+id/passwordInputSignupLayout"
             app:layout_constraintTop_toBottomOf="@id/passwordInputSignupLayout" />
