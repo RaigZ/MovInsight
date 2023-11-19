@@ -18,6 +18,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
+import com.example.movinsight.RecyclerView.RVAdapter
 import com.example.movinsight.Room.User
 import com.example.movinsight.Room.UserDatabase
 import com.example.movinsight.fragments.LoginFragment
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity() {
     * An example request of imdbs search api, remove spaces in the movie/show name
     * this doesn't need to be in a function.
     * */
-    private fun searchMovie(api: APIInterface) {
+    private fun searchMovie(api: APIInterface, adapter: RVAdapter) {
         val data = api.searchIMDB("Lordoftherings")
         data.enqueue(object: Callback<SearchMovieResponse> {
             override fun onResponse(
@@ -174,6 +175,9 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     Log.d("ApiResponse", "${apiResponse}")
+                    apiResponse?.let {
+                        adapter.setData(it)
+                    }
                 } else {
                     // Log the error response
                     Log.e("ApiResponseError", response.errorBody()?.string() ?: "Unknown error")
