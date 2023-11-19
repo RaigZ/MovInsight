@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:id="@+id/tvuserid"
+        android:id="@+id/tvqid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -24,11 +24,24 @@
 
 
     <TextView
-        android:id="@+id/tvcompleted"
+        android:id="@+id/tvyear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/tvstars"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
+    <TextView
+        android:id="@+id/tvq"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/imageURL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="1sp"

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.example.movinsight.API.APIInterface
+import com.example.movinsight.API.searchItem
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -70,19 +71,22 @@ class ApiFragment : Fragment() {
 
     private fun saveJsonData() {
         val data = retrofitBuilder.getAPIData()
-        data.enqueue(object: Callback<List<DataAPIItem>?> {
+        data.enqueue(object: Callback<List<searchItem>?> {
             override fun onResponse(
-                call: Call<List<DataAPIItem>?>,
-                response: Response<List<DataAPIItem>?>
+                call: Call<List<searchItem>?>,
+                response: Response<List<searchItem>?>
             ) {
                 val responseReturn = response.body()!!
                 for(element in responseReturn.take(2)){
                     //Populate map
                     val data = buildMap<String, Any> {
-                        put("userId", element.userId)
                         put("id", element.id)
+                        put("qid", element.qid)
                         put("title", element.title)
-                        put("completed", element.completed)
+                        put("year", element.year)
+                        put("stars", element.stars)
+                        put("q", element.q)
+                        put("image", element.image)
                     }
 
                     //Add to placeholder collection
@@ -97,7 +101,7 @@ class ApiFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<List<DataAPIItem>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<searchItem>?>, t: Throwable) {
                 Log.d("APIFAIL", "message" +  t.message)
             }
         })

@@ -10,14 +10,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movinsight.API.APIInterface
+import com.example.movinsight.API.APIService.imdbAPI
+import com.example.movinsight.API.SearchMovieResponse
+import com.example.movinsight.API.searchItem
 import com.example.movinsight.AddActivity
-import com.example.movinsight.DataAPIItem
 import com.example.movinsight.R
 import com.example.movinsight.RecyclerView.RVAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,6 +40,7 @@ class DisplayFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var recyclerView: RecyclerView
+    lateinit var movieAdapter: RVAdapter
     private lateinit var root: View
     private lateinit var db: FirebaseFirestore
 
@@ -53,7 +60,35 @@ class DisplayFragment : Fragment() {
         root = inflater.inflate(R.layout.fragment_display, container, false)
         recyclerView = root.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        var movieAdapter = RVAdapter(emptyList())
+        recyclerView.adapter = movieAdapter
         db = Firebase.firestore
+
+        fun searchMovie(api: APIInterface, adapter: RVAdapter) {
+            val data = api.searchIMDB("Lordoftherings")
+            data.enqueue(object: Callback<SearchMovieResponse> {
+                override fun onResponse(
+                    call: Call<SearchMovieResponse>,
+                    response: Response<SearchMovieResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val apiResponse = response.body()
+                        Log.d("ApiResponse", "${apiResponse}")
+                        apiResponse?.let {
+                            adapter.setData(it)
+                        }
+                    } else {
+                        // Log the error response
+                        Log.e("ApiResponseError", response.errorBody()?.string() ?: "Unknown error")
+                    }
+                }
+
+                override fun onFailure(call: Call<SearchMovieResponse>, t: Throwable) {
+                    Log.d("APIFAIL", "message" +  t.message)
+                }
+            })
+        }
+        searchMovie(imdbAPI, movieAdapter)
         return root
     }
 
@@ -72,16 +107,21 @@ class DisplayFragment : Fragment() {
             .addOnSuccessListener {task ->
                 //Log.d("Inside display fragment", "${task.documents.get(0)}")
                 if(task.isEmpty){
+
                     Toast.makeText(context, "Query empty", Toast.LENGTH_LONG).show()
                 } else {
-                    var data = mutableListOf<DataAPIItem>()
+                    var data = mutableListOf<searchItem>()
                     for(element in task){
-                        val completed = element.data["completed"] as Boolean
-                        val id = (element.data["id"] as Long).toInt()
+                        val id = (element.data["id"] as String)
+                        val qid = (element.data["qid"] as String)
                         val title = element.data["title"] as String
-                        val userId = (element.data["userId"] as Long).toInt()
+                        val year = (element.data["year"] as Long).toInt()
+                        val stars = (element.data["stars"] as String)
+                        val q = (element.data["q"] as String)
+                        val image = (element.data["image"] as String)
 
-                        data.add(DataAPIItem(completed, id, title, userId))
+
+                        data.add(searchItem(id, qid, title, year, stars, q, image))
                     }
                     Log.d("Testing", "${data.size}")
                     recyclerView.adapter = RVAdapter(data)
