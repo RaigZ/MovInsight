@@ -129,18 +129,31 @@
 
     <Button
         android:id="@+id/bAddToRoom"
-        android:layout_width="156dp"
-        android:layout_height="34dp"
-        android:layout_marginBottom="24dp"
+        android:layout_width="140dp"
+        android:layout_height="33dp"
         android:backgroundTint="#A13232"
         android:text="Room Test"
         android:textAlignment="center"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/fContainer"
+        app:layout_constraintBottom_toTopOf="@+id/bPermissionsTest"
         app:layout_constraintEnd_toStartOf="@+id/signupButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bPermissionsTest"
+        android:layout_width="150dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#569E5F"
+        android:text="Permissions Test"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/fContainer"
+        app:layout_constraintEnd_toStartOf="@+id/signupButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

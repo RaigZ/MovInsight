@@ -1,5 +1,6 @@
 package com.example.movinsight
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -151,6 +152,10 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch { // coroutine on Main
                 insertUserToRoomDB(db)
             }
+        }
+        // PERMISSIONS TEST - GO TO PERMISSIONS ACTIVITY
+        findViewById<Button>(R.id.bPermissionsTest).setOnClickListener {
+            startActivity(Intent(this, PermissionsTesting::class.java))
         }
     }
 
