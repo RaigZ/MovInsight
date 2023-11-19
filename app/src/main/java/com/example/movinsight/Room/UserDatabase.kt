@@ -9,7 +9,7 @@ import androidx.room.TypeConverters
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
+@TypeConverters(UserConverters::class)
 abstract class UserDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }

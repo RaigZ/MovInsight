@@ -14,7 +14,7 @@ data class User (
     @ColumnInfo(name = "watchlist") val watchlist: ArrayList<String>
 )
 
-class Converters {
+class UserConverters {
 
     // Converts a given string to an ArrayList<String>
     // Needed since Room does not accept Array<String> as a type

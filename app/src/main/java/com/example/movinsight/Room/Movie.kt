@@ -3,6 +3,7 @@ package com.example.movinsight.Room
 import androidx.room.PrimaryKey
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.TypeConverter
 
 @Entity(tableName = "movie")
 data class Movie (
@@ -26,3 +27,10 @@ data class Movie (
     @ColumnInfo(name = "titleCertificate") val titleCertificate: TitleCertificate,
     */
 )
+
+class MovieConverters {
+
+    //@TypeConverter
+    //fun name
+
+}

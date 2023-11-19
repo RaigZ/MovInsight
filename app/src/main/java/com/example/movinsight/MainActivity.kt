@@ -50,6 +50,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // ROOM TEST - OPEN DB
+        val db = Room.databaseBuilder(
+            applicationContext,
+            UserDatabase::class.java, "user"
+        ).build()
+
         //If user is still logged in, display email(*username later),
         //and change visibility for login/signup/sign-out buttons
         auth = Firebase.auth
@@ -139,10 +145,10 @@ class MainActivity : AppCompatActivity() {
         }*/
 
 
-        // testing Room!!!!!!!!!!!!!
+        // ROOM TEST - CLICK TO ADD USER TO DB
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
             lifecycleScope.launch { // coroutine on Main
-                roomTests()
+                insertUserToRoomDB(db)
             }
         }
     }
@@ -206,18 +212,14 @@ class MainActivity : AppCompatActivity() {
 
     // Note to self: The database only opens when a change is made
     // Testing the Room database
-    private suspend fun roomTests() {
-        val db = Room.databaseBuilder(
-            applicationContext,
-            UserDatabase::class.java, "user"
-        ).build()
+    private suspend fun insertUserToRoomDB(db : UserDatabase) {
         val userDao = db.userDao()
 
         var watchlist = ArrayList<String>()
         watchlist.add("movie1")
         watchlist.add("movie2")
         watchlist.add("movie3")
-        val test = User("username", "email", watchlist)
-        userDao.insertUser(test)
+        val user1 = User("guyDudeBro", "dopeEmail", watchlist)
+        userDao.insertUser(user1)
     }
 }
