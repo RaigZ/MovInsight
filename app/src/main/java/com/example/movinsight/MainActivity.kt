@@ -215,11 +215,29 @@ class MainActivity : AppCompatActivity() {
     private suspend fun insertUserToRoomDB(db : UserDatabase) {
         val userDao = db.userDao()
 
-        var watchlist = ArrayList<String>()
-        watchlist.add("movie1")
-        watchlist.add("movie2")
-        watchlist.add("movie3")
-        val user1 = User("guyDudeBro", "dopeEmail", watchlist)
+        userDao.deleteUser(userDao.getAllUsers()[0])
+
+        /*
+        var watchlist1 = ArrayList<String>()
+        watchlist1.add("movie1")
+        watchlist1.add("movie2")
+        watchlist1.add("movie3")
+        val user1 = User("heisenberg", "oneWhoKnocks@gmail.com", watchlist1)
         userDao.insertUser(user1)
+
+        var watchlist2 = ArrayList<String>()
+        watchlist2.add("movie1")
+        watchlist2.add("movie2")
+        watchlist2.add("movie3")
+        val user2 = User("pinkman", "chiliPowder@gmail.com", watchlist2)
+        userDao.insertUser(user2)
+
+        var watchlist3 = ArrayList<String>()
+        watchlist3.add("movie1")
+        watchlist3.add("movie2")
+        watchlist3.add("movie3")
+        val user3 = User("goodman", "slippinJimmy@gmail.com", watchlist3)
+        userDao.insertUser(user3)
+        */
     }
 }
