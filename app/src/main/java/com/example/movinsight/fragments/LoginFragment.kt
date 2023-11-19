@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
         if(auth.currentUser != null){
             //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
             //viewModel.selectItem(auth)
-            db.getUser(email, userViewModel)
+            db.getUser(email, userViewModel, requireContext())
             return
         }
         auth.signInWithEmailAndPassword(email, password)
@@ -114,7 +114,7 @@ class LoginFragment : Fragment() {
                     root.findViewById<TextInputEditText>(R.id.emailInputLogin).setText("")
                     root.findViewById<TextInputEditText>(R.id.passwordInputLogin).setText("")
                     //viewModel.selectItem(auth)
-                    db.getUser(email, userViewModel)
+                    db.getUser(email, userViewModel, requireContext())
                 } else {
                     Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()
                     Log.d("FirebaseService", "Login with email/password: Failed!", task.exception)

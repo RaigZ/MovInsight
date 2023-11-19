@@ -3,28 +3,30 @@ package com.example.movinsight.API
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.movinsight.UserViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import com.example.movinsight.Room.User
 import com.example.movinsight.Room.UserDao
 import com.example.movinsight.Room.UserDatabase
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class FirestoreService {
 
     companion object {
         private var db: FirebaseFirestore = Firebase.firestore
-        private lateinit var userDB: UserDatabase
-        private lateinit var userDao: UserDao
 
         //Function call to firestore to return query, will be utilized with room db to persist data through the app.
-        fun getUser(email: String, viewModel: UserViewModel){ //, viewModel: FirestoreViewModel
+        fun getUser(email: String, viewModel: UserViewModel, context: Context){ //, viewModel: FirestoreViewModel
             db.collection("users")
                 .whereEqualTo("email", email)
                 .get()
@@ -40,23 +42,16 @@ class FirestoreService {
                             }
                             viewModel.selectItem(user)
 
+                            //Log.d("FLAG 1", "BEFORE ENTERING COROUTINE")
                             // Insert user into the Room database
-                            /*
-                            lifecycleScope.UserViewModel {
+                            viewModel.viewModelScope.launch {
+                                //Log.d("FLAG 2", "RIGHT BEFORE FUNCTION CALL")
                                 addUserToRoomDB(query.get("email") as String,
                                     query.get("username") as String,
-                                    query.get("watchlist") as String)
+                                    query.get("watchlist") as ArrayList<String>,
+                                    context)
+                                //Log.d("FLAG 5", "FUNCTION FULLY EXECUTED")
                             }
-                            */
-                            /*
-                            val context = ApplicationProvider.getApplicationContext<Context>() // Get context
-                            userDB = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build() // Get UserDatabase
-                            userDao = userDB.userDao() // Get UserDao
-                            val roomUser = User(query.get("email") as String, // Create user based on info
-                                query.get("username") as String,
-                                query.get("watchlist") as String) // should be "as ArrayList<String>
-                            userDao.insertUser(roomUser) // Insert user into UserDatabase
-                            */
                         }
                         //Log.d("FirestoreService file", "${task.result.documents}")
                     } else {
@@ -85,12 +80,17 @@ class FirestoreService {
                 }
         }
 
-        private suspend fun addUserToRoomDB(email: String, username: String, watchlist: String)
+        // Adds user to User database in Room
+        private suspend fun addUserToRoomDB(email: String, username: String, watchlist: ArrayList<String>, context: Context)
         {
-            val context = ApplicationProvider.getApplicationContext<Context>() // Get context
-            userDB = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build() // Get UserDatabase
-            userDao = userDB.userDao() // Get UserDao
-            val roomUser = User(email, username, watchlist)
+            //Log.d("FLAG 3", "FUNCTION ENTERED")
+            val userDB = Room.databaseBuilder(
+                context,
+                UserDatabase::class.java, "user"
+            ).build()
+            //Log.d("FLAG 4", "DATABASE BUILT")
+            val userDao = userDB.userDao() // Get UserDao
+            val roomUser = User(email, username, watchlist) // Create user based on given info
             userDao.insertUser(roomUser) // Insert user into UserDatabase
         }
     }
