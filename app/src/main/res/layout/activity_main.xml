@@ -88,7 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent">
 
-            <com.google.android.material.bottomappbar.BottomAppBar
+            <!--<com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottomAppBar"
                 style="@style/Widget.Material3.BottomAppBar"
                 android:layout_width="match_parent"
@@ -103,7 +103,19 @@
                 android:layout_height="wrap_content"
                 app:backgroundTint="#42CD95"
                 app:layout_anchor="@id/bottomAppBar"
-                app:srcCompat="@drawable/ic_add" />
+                app:srcCompat="@drawable/ic_add" />-->
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_nav"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:menu="@menu/bottom_navbar" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -140,5 +152,26 @@
         android:backgroundTint="#42CD95"
         android:textColor="#000000"
         android:strokeColor="#000000"/>
+
+    <Button
+        android:id="@+id/bAddToRoom"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="152dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#42CD95"
+        android:text="Add To Room"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        app:cornerRadius="5dp"
+        app:iconPadding="10dp"
+        app:iconTint="#000000"
+        app:layout_constraintBottom_toTopOf="@+id/fContainer"
+        app:layout_constraintEnd_toStartOf="@+id/signupButton"
+        app:layout_constraintHorizontal_bias="0.411"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.727"
+        app:strokeColor="#000000" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
