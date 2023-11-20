@@ -96,7 +96,7 @@ class SignupFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d("FirebaseService", "Created user with email/password successfully")
-                    //viewModel.selectItem(auth)
+
                     root.findViewById<TextInputEditText>(R.id.usernameInputSignup).setText("")
                     root.findViewById<TextInputEditText>(R.id.emailInputSignup).setText("")
                     root.findViewById<TextInputEditText>(R.id.passwordInputSignup).setText("")
