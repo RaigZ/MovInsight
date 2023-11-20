@@ -19,7 +19,7 @@
             android:name=".PermissionsTesting"
             android:exported="false" />
         <activity
-            android:name=".RemoveActivity"
+            android:name=".MovieInfoActivity"
             android:exported="false" />
         <activity
             android:name=".AddActivity"

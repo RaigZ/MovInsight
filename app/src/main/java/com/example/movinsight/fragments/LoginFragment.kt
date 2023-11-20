@@ -99,10 +99,9 @@ class LoginFragment : Fragment() {
 
     private fun signIn(email: String, password: String) {
         Log.d("FirebaseService", "${auth.currentUser}")
-        //If user is logged in, return because we will raise an exception if we try authenticating when user is already logged in
+        //If user is already logged in return otherwise this will raise an exception
         if(auth.currentUser != null){
             //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
-            //viewModel.selectItem(auth)
             db.getUser(email, userViewModel, requireContext())
             return
         }
@@ -113,7 +112,7 @@ class LoginFragment : Fragment() {
                     Log.d("FirebaseService", "login with email/password: Success!")
                     root.findViewById<TextInputEditText>(R.id.emailInputLogin).setText("")
                     root.findViewById<TextInputEditText>(R.id.passwordInputLogin).setText("")
-                    //viewModel.selectItem(auth)
+                    //Call db to get userDetails
                     db.getUser(email, userViewModel, requireContext())
                 } else {
                     Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()

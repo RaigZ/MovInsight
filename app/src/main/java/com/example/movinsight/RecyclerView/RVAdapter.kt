@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.searchItem
 import com.example.movinsight.R
-import com.example.movinsight.RemoveActivity
+import com.example.movinsight.MovieInfoActivity
 
 class RVAdapter(private var dataList: List<searchItem>) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RVAdapter.ViewHolder {
@@ -55,25 +55,25 @@ class RVAdapter(private var dataList: List<searchItem>) : RecyclerView.Adapter<R
 
         init {
             itemView.setOnClickListener {
-                Log.d("In RVAdapter", dataList[adapterPosition].id)
-                Log.d("In RVAdapter", dataList[adapterPosition].qid)
-                Log.d("In RVAdapter", dataList[adapterPosition].title)
-                Log.d("In RVAdapter", "${dataList[adapterPosition].year}")
-                Log.d("In RVAdapter", dataList[adapterPosition].stars)
-                Log.d("In RVAdapter", dataList[adapterPosition].q)
-                Log.d("In RVAdapter", dataList[adapterPosition].image)
+                val item = dataList[adapterPosition]
+                Log.d("In RVAdapter", item.id)
+                Log.d("In RVAdapter", item.qid)
+                Log.d("In RVAdapter", item.title)
+                Log.d("In RVAdapter", item.year.toString())
+                Log.d("In RVAdapter", item.stars)
+                Log.d("In RVAdapter", item.q)
+                Log.d("In RVAdapter", item.image)
 
-                val intent = Intent(itemView.context, RemoveActivity::class.java)
-                intent.putExtra("id", dataList[adapterPosition].id)
-                intent.putExtra("qid", dataList[adapterPosition].qid)
-                intent.putExtra("title", dataList[adapterPosition].title)
-                intent.putExtra("year", dataList[adapterPosition].year)
-                intent.putExtra("stars", dataList[adapterPosition].stars)
-                intent.putExtra("q", dataList[adapterPosition].q)
-                intent.putExtra("image", dataList[adapterPosition].image)
-
+                val intent = Intent(itemView.context, MovieInfoActivity::class.java)
+                intent.putExtra("id", item.id)
+                intent.putExtra("qid", item.qid)
+                intent.putExtra("title", item.title)
+                intent.putExtra("year", item.year.toString())
+                intent.putExtra("stars", item.stars)
+                intent.putExtra("q", item.q)
+                intent.putExtra("image", item.image)
                 itemView.context.startActivity(intent)
-                Toast.makeText(itemView.context, "You have clicked ${dataList[adapterPosition]}", Toast.LENGTH_LONG).show()
+                Toast.makeText(itemView.context, "You have clicked $item", Toast.LENGTH_LONG).show()
             }
         }
     }

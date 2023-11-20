@@ -59,7 +59,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage:20.3.0")
-
+    implementation("com.squareup.picasso:picasso:2.8")
     implementation("androidx.room:room-runtime:2.6.0")//2.2.5
     implementation("androidx.room:room-ktx:2.6.0")//2.2.5
     //implementation("com.google.dagger:dagger:2.9")//2.9

@@ -154,9 +154,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // PERMISSIONS TEST - GO TO PERMISSIONS ACTIVITY
-        findViewById<Button>(R.id.bPermissionsTest).setOnClickListener {
+        /*findViewById<Button>(R.id.bPermissionsTest).setOnClickListener {
             startActivity(Intent(this, PermissionsTesting::class.java))
-        }
+        }*/
     }
 
     private fun changeFragment(fragment: Fragment) {

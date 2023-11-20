@@ -61,6 +61,23 @@ class FirestoreService {
                 }
         }
 
+        fun getUser(email: String, callback: (result: ArrayList<String>) -> Unit){
+            db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener() { task ->
+                    if(task.isSuccessful){
+                        var query = task.result.documents[0]
+                        if(query != null){
+                            callback(query.get("watchlist") as ArrayList<String>)
+                        }
+                    } else {
+                        Firebase.auth.signOut()
+                        Log.d("FirestoreService file", "not successfull")
+                    }
+                }
+        }
+
         //Function call to create user in Firestore storage
         fun createUser(username: String, email: String, viewModel: UserViewModel, context: Context){
             val user = buildMap<String, Any>{
@@ -78,6 +95,12 @@ class FirestoreService {
                     Firebase.auth.signOut()
                     Toast.makeText(context, "Account creation failed!", Toast.LENGTH_LONG).show()
                 }
+        }
+
+        fun addToWatchlist(email: String, movieName: String) {
+            getUser(email) { result ->
+                //Result contains the watchlist from current user
+            }
         }
 
         // Adds user to User database in Room
