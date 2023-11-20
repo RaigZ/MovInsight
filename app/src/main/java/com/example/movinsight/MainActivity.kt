@@ -146,17 +146,14 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
-
+        /*
         // ROOM TEST - CLICK TO ADD USER TO DB
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
             lifecycleScope.launch { // coroutine on Main
                 insertUserToRoomDB(db)
             }
         }
-        // PERMISSIONS TEST - GO TO PERMISSIONS ACTIVITY
-        /*findViewById<Button>(R.id.bPermissionsTest).setOnClickListener {
-            startActivity(Intent(this, PermissionsTesting::class.java))
-        }*/
+        */
     }
 
     private fun changeFragment(fragment: Fragment) {
@@ -224,8 +221,6 @@ class MainActivity : AppCompatActivity() {
     private suspend fun insertUserToRoomDB(db : UserDatabase) {
         val userDao = db.userDao()
 
-        userDao.deleteUser(userDao.getAllUsers()[0])
-
         /*
         var watchlist1 = ArrayList<String>()
         watchlist1.add("movie1")
@@ -247,6 +242,16 @@ class MainActivity : AppCompatActivity() {
         watchlist3.add("movie3")
         val user3 = User("goodman", "slippinJimmy@gmail.com", watchlist3)
         userDao.insertUser(user3)
+        */
+
+        /*
+        var watchlist = ArrayList<String>()
+        watchlist.add("movie1")
+        watchlist.add("movie2")
+        watchlist.add("movie3")
+        val dummy = User("dummy", "dummy", watchlist)
+        userDao.insertUser(dummy)
+        userDao.deleteUser(userDao.getAllUsers()[0])
         */
     }
 }
