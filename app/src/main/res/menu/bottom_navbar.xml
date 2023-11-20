@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
+    <!--<item
         android:id="@+id/accelerator"
         android:icon="@drawable/ic_display"
         android:title="accelerator"
@@ -21,6 +21,30 @@
         android:icon="@drawable/ic_api"
         android:title="dashboard title"
         android:contentDescription="Accessibility"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"/>-->
+
+    <item
+        android:id="@+id/ic_profile"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile" >
+    </item>
+
+    <item
+        android:id="@+id/ic_home"
+        android:title="Home"
+        android:icon="@drawable/ic_home" >
+    </item>
+
+    <item
+        android:id="@+id/ic_watchlist"
+        android:title="Watchlist"
+        android:icon="@drawable/ic_display" >
+    </item>
+
+    <!--<item
+        android:id="@+id/ic_settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" >
+    </item>-->
 
 </menu>

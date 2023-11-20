@@ -1,5 +1,6 @@
 package com.example.movinsight
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -24,6 +25,7 @@ import com.example.movinsight.Room.User
 import com.example.movinsight.Room.UserDatabase
 import com.example.movinsight.fragments.LoginFragment
 import com.example.movinsight.fragments.SignupFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -146,6 +148,41 @@ class MainActivity : AppCompatActivity() {
             }
         }*/
 
+        //val settingsActivity = SettingsActivity()
+        val homeActivity = MainActivity()
+        val profileActivity = ProfileActivity()
+        val watchlistActivity = WatchlistActivity()
+
+        findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
+            when(item.itemId) {
+                /*R.id.ic_api -> {
+                    changeActivity(apiActivity)
+                    true
+                }
+                R.id.ic_display -> {
+                    changeActivity(displayActivity)
+                    true
+                }*/
+                R.id.ic_home -> {
+                    changeActivity(homeActivity)
+                    true
+                }
+                R.id.ic_profile -> {
+                    changeActivity(profileActivity)
+                    true
+                }
+                /*R.id.ic_settings -> {
+                    changeActivity(settingsActivity)
+                    true
+                }*/
+                R.id.ic_watchlist -> {
+                    changeActivity(watchlistActivity)
+                    true
+                }
+                else -> false
+            }
+        }
+
         /*
         // ROOM TEST - CLICK TO ADD USER TO DB
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
@@ -161,6 +198,10 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.fContainer, fragment)
             commit()
         }
+    }
+
+    private fun changeActivity(activity: Activity) {
+        startActivity(Intent(this, activity::class.java))
     }
 
     /*
