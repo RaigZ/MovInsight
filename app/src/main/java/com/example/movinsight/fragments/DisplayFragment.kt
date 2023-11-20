@@ -1,6 +1,5 @@
 package com.example.movinsight.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,10 +13,8 @@ import com.example.movinsight.API.APIInterface
 import com.example.movinsight.API.APIService.imdbAPI
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.searchItem
-import com.example.movinsight.AddActivity
 import com.example.movinsight.R
 import com.example.movinsight.RecyclerView.RVAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -95,10 +92,6 @@ class DisplayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fetchData()
-        root.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
-            val intent = Intent(context, AddActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     fun fetchData(){
