@@ -18,6 +18,7 @@ import com.example.movinsight.fragments.DisplayFragment
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import com.example.movinsight.API.APIService
+import com.example.movinsight.API.FirestoreService
 import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.TopMovieResponse
 import com.example.movinsight.RecyclerView.RVAdapter
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MovInsightViewModel by viewModels()
     private val userModel: UserViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
+    private val firebase: FirestoreService.Companion = FirestoreService
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -67,12 +69,16 @@ class MainActivity : AppCompatActivity() {
 
         //When room is implemented check if currentUser == user in room.
         if(currentUser != null){
+            FirestoreService.setCurrentUserId(currentUser.uid)
+
             findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
             findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
-            var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
-            usernameField.visibility = View.VISIBLE
-            usernameField.text = auth.currentUser!!.email.toString()
+            //var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
+            //usernameField.visibility = View.VISIBLE
+            //usernameField.text = auth.currentUser!!.email.toString()
+
+            FirestoreService.getUserV2(userModel, this)
         }
 
         //Creating fragment instances
@@ -83,14 +89,22 @@ class MainActivity : AppCompatActivity() {
 
         //UserViewModel, waits for a Map<String, Any> map to be returned
         userModel.selectedItem.observe(this, Observer { item ->
+            //firebase.setUserEmail(item["email"] as String)
+            //Save info in firestore class
+            Log.d("Testing firestore service", "${firebase.getUserEmail()}")
+            Log.d("Testing firestore service", "${firebase.getCurrentUserId()}")
+            //firebase.setUserEmail("sadf")
+            //firebase.setUserEmail(item["email"])
+
             var usernameField = findViewById<TextView>(R.id.usernameField)
             usernameField.visibility = View.VISIBLE
             usernameField.text = item["username"].toString()
 
             //Change visibility for login/sign-up/sign-out buttons
-            findViewById<Button>(R.id.loginButton).visibility = View.GONE
+            /*findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
             findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
+            */
 
             //Change this to MainFragment
             changeFragment(DisplayFragment)
