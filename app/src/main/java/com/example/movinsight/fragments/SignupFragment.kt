@@ -32,7 +32,6 @@ class SignupFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
-    private var db = FirestoreService
     //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -63,7 +62,7 @@ class SignupFragment : Fragment() {
             val email = root.findViewById<TextInputEditText>(R.id.emailInputSignup).text.toString()
             val password = root.findViewById<TextInputEditText>(R.id.passwordInputSignup).text.toString()
 
-            if(!username.isEmpty() && !email.isEmpty() && !password.isEmpty())
+            if(username.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty())
                 signUp(username, email, password)
             else
                 Toast.makeText(context, "Please fill every field", Toast.LENGTH_LONG).show()
@@ -101,7 +100,11 @@ class SignupFragment : Fragment() {
                     root.findViewById<TextInputEditText>(R.id.emailInputSignup).setText("")
                     root.findViewById<TextInputEditText>(R.id.passwordInputSignup).setText("")
                     //Need to save user first then pass through userViewModel
-                    db.createUser(username, email, userViewModel, requireContext())
+                    //db.createUser(username, email, userViewModel, requireContext())
+                    //db.setCurrentUserId(auth.currentUser?.uid ?: "")
+                    FirestoreService.setCurrentUserId(auth.currentUser?.uid ?: "")
+                    FirestoreService.createUserAccount(FirestoreService.getCurrentUserId(), username, email, userViewModel, requireContext())
+                    //FirestoreService.createUser(username, email, userViewModel, requireContext())
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()

@@ -31,7 +31,6 @@ class LoginFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
-    private var db = FirestoreService
     //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -102,18 +101,28 @@ class LoginFragment : Fragment() {
         //If user is already logged in return otherwise this will raise an exception
         if(auth.currentUser != null){
             //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
-            db.getUser(email, userViewModel, requireContext())
+            FirestoreService.setCurrentUserId(auth.currentUser?.uid ?: "")
+            FirestoreService.getUserV2(userViewModel, requireContext())
+            //db.getUser(email, userViewModel, requireContext())
             return
         }
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
+                    //var x = task.result
+                    //Log.d("FirebaseService", "$x")
                     //Send the view-model the Auth object(*make call to firebase to retrieve user details based on query)
+                    FirestoreService.setCurrentUserId(auth.currentUser?.uid ?: "")
+                    Log.d("FirebaseService", "${FirestoreService.getCurrentUserId()}")
                     Log.d("FirebaseService", "login with email/password: Success!")
                     root.findViewById<TextInputEditText>(R.id.emailInputLogin).setText("")
                     root.findViewById<TextInputEditText>(R.id.passwordInputLogin).setText("")
                     //Call db to get userDetails
-                    db.getUser(email, userViewModel, requireContext())
+                    FirestoreService.setUserEmail(email)
+                    FirestoreService.getUserV2(userViewModel, requireContext())
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG).show()
+                    //FirestoreService.getUser(email, userViewModel, requireContext())
+                    //db.getUser(email, userViewModel, requireContext())
                 } else {
                     Toast.makeText(context, "Incorrect username or password", Toast.LENGTH_LONG).show()
                     Log.d("FirebaseService", "Login with email/password: Failed!", task.exception)
