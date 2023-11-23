@@ -32,7 +32,6 @@ class SignupFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
-    private val db: FirestoreService.Companion = FirestoreService
     //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -104,7 +103,7 @@ class SignupFragment : Fragment() {
                     //db.createUser(username, email, userViewModel, requireContext())
                     //db.setCurrentUserId(auth.currentUser?.uid ?: "")
                     FirestoreService.setCurrentUserId(auth.currentUser?.uid ?: "")
-                    FirestoreService.createUserAccount(db.getCurrentUserId(), username, email, userViewModel, requireContext())
+                    FirestoreService.createUserAccount(FirestoreService.getCurrentUserId(), username, email, userViewModel, requireContext())
                     //FirestoreService.createUser(username, email, userViewModel, requireContext())
                 } else {
                     // If sign in fails, display a message to the user.

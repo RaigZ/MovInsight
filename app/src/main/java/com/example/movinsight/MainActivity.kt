@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MovInsightViewModel by viewModels()
     private val userModel: UserViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
-    private val firebase: FirestoreService.Companion = FirestoreService
+    //private val firebase: FirestoreService.Companion = FirestoreService
     private val retrofitBuilder by lazy {
         Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
@@ -91,8 +91,8 @@ class MainActivity : AppCompatActivity() {
         userModel.selectedItem.observe(this, Observer { item ->
             //firebase.setUserEmail(item["email"] as String)
             //Save info in firestore class
-            Log.d("Testing firestore service", "${firebase.getUserEmail()}")
-            Log.d("Testing firestore service", "${firebase.getCurrentUserId()}")
+            Log.d("Testing firestore service", "${FirestoreService.getUserEmail()}")
+            Log.d("Testing firestore service", "${FirestoreService.getCurrentUserId()}")
             //firebase.setUserEmail("sadf")
             //firebase.setUserEmail(item["email"])
 

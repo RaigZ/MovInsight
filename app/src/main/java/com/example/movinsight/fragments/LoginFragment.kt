@@ -31,7 +31,6 @@ class LoginFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirestoreService
     //View models
     private val viewModel: MovInsightViewModel by activityViewModels()
     private val userViewModel: UserViewModel by activityViewModels()
@@ -44,7 +43,6 @@ class LoginFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         auth = FirebaseAuth.getInstance()
-        db = FirestoreService.instance()
     }
 
     override fun onStart() {

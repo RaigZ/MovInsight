@@ -15,7 +15,6 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 class MovieInfoActivity : AppCompatActivity() {
-    private var db = FirestoreService()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
