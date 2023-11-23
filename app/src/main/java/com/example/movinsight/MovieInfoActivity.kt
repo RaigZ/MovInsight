@@ -29,7 +29,7 @@ class MovieInfoActivity : AppCompatActivity() {
         val userId = intent.getStringExtra("userId")
         val title = intent.getStringExtra("title")
         val imageView: ImageView = findViewById(R.id.movieImage)
-        findViewById<TextView>(R.id.showId).text = "ID: " + id
+        findViewById<TextView>(R.id.showId).text = "ID: " + id // Why do we have to show this id in particular? The UserId below makes sense but why this one?
         findViewById<TextView>(R.id.showUserId).text = "UserID: " + userId
         findViewById<TextView>(R.id.showTitle).text = "Title: " + title
 

@@ -8,7 +8,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#C2C6D0"
+        android:backgroundTint="#C2C6D0">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayoutLogin"
