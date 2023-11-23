@@ -3,7 +3,6 @@ package com.example.movinsight.API
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -17,15 +16,80 @@ import androidx.room.Room
 import com.example.movinsight.Room.User
 import com.example.movinsight.Room.UserDao
 import com.example.movinsight.Room.UserDatabase
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import kotlin.coroutines.coroutineContext
 
 class FirestoreService {
-
     companion object {
         private var db: FirebaseFirestore = Firebase.firestore
+        private var currentUserEmail: String = ""
+        private var currentUsername: String = ""
+        private var currentUserId: String = ""
+        private var currentWatchlist: MutableList<String> = mutableListOf()
+
+        fun instance(): FirestoreService = FirestoreService()
+
+        fun getUserV2(viewModel: UserViewModel, context: Context){
+            if(currentUserId.isNotEmpty()){
+                db.collection("users").document(currentUserId)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if(document != null){
+                            val user = buildMap<String, Any> {
+                                put("email", document.getString("username")!!)
+                                put("username", document.getString("username")!!)
+                                put("watchlist", document.get("watchlist")!!)
+                            }
+                            currentUsername = document.getString("username") ?: ""
+                            currentUserEmail = document.getString("email") ?: ""
+                            currentWatchlist = (document.get("watchlist") as List<String>).toMutableList()
+                            viewModel.selectItem(user)
+
+                            //Room
+                            viewModel.viewModelScope.launch {
+                                //Log.d("FLAG 2", "RIGHT BEFORE FUNCTION CALL")
+                                addUserToRoomDB(document.getString("email") as String,
+                                    document.getString("username") as String,
+                                    document.get("watchlist") as ArrayList<String>,
+                                    context)
+                                //Log.d("FLAG 5", "FUNCTION FULLY EXECUTED")
+                            }
+                        }
+                    }
+                    .addOnFailureListener {
+                        Firebase.auth.signOut()
+                        Log.d("FirestoreService", "GetUserv2 failed")
+                    }
+            }
+        }
+
+        fun getUserV2(viewModel: UserViewModel){
+            if(currentUserId.isNotEmpty()){
+                db.collection("users").document(currentUserId)
+                    .get()
+                    .addOnSuccessListener { document ->
+                        if(document != null){
+                            val user = buildMap<String, Any> {
+                                put("email", document.getString("email")!!)
+                                put("username", document.getString("username")!!)
+                                put("watchlist", document.get("watchlist")!!)
+                            }
+                            currentUsername = document.getString("username") ?: ""
+                            currentUserEmail = document.getString("email") ?: ""
+                            currentWatchlist = (document.get("watchlist") as List<String>).toMutableList()
+                            viewModel.selectItem(user)
+                        }
+                    }
+                    .addOnFailureListener {
+                        Firebase.auth.signOut()
+                        Log.d("FirestoreService", "GetUserv2 failed")
+                    }
+            }
+        }
 
         //Function call to firestore to return query, will be utilized with room db to persist data through the app.
+        @Deprecated("Use getUserV2")
         fun getUser(email: String, viewModel: UserViewModel, context: Context){ //, viewModel: FirestoreViewModel
             db.collection("users")
                 .whereEqualTo("email", email)
@@ -52,33 +116,48 @@ class FirestoreService {
                                     context)
                                 //Log.d("FLAG 5", "FUNCTION FULLY EXECUTED")
                             }
+                            //currentUserEmail = query.get("email") as String ?: ""
+                            //currentDocId = query.id
                         }
                         //Log.d("FirestoreService file", "${task.result.documents}")
                     } else {
                         Firebase.auth.signOut()
+                        //currentUserEmail = ""
+                        //currentDocId = ""
                         Log.d("FirestoreService file", "not successfull")
                     }
                 }
         }
 
-        fun getUser(email: String, callback: (result: ArrayList<String>) -> Unit){
-            db.collection("users")
-                .whereEqualTo("email", email)
-                .get()
-                .addOnCompleteListener() { task ->
+        /*
+        * Creates user account based off the Firebase auth user id, makes updating and getting user info easier.
+        * */
+        fun createUserAccount(uid: String, username: String, email: String, viewModel: UserViewModel, context: Context) {
+            val user = buildMap<String, Any>{
+                put("username", username)
+                put("email", email)
+                put("watchlist", ArrayList<String>())
+            }
+            db.collection("users").document(uid)
+                .set(user)
+                .addOnCompleteListener {task ->
                     if(task.isSuccessful){
-                        var query = task.result.documents[0]
-                        if(query != null){
-                            callback(query.get("watchlist") as ArrayList<String>)
-                        }
+                        currentUserId = uid
+                        currentUsername = username
+                        currentUserEmail = email
+                        Toast.makeText(context, "Account creation Success!", Toast.LENGTH_LONG).show()
+                        viewModel.selectItem(user)
                     } else {
+                        reset()
                         Firebase.auth.signOut()
-                        Log.d("FirestoreService file", "not successfull")
+                        Toast.makeText(context, "Account creation failed!", Toast.LENGTH_LONG).show()
                     }
                 }
+            return
         }
 
         //Function call to create user in Firestore storage
+        @Deprecated("Use createUserAccount")
         fun createUser(username: String, email: String, viewModel: UserViewModel, context: Context){
             val user = buildMap<String, Any>{
                 put("username", username)
@@ -92,15 +171,47 @@ class FirestoreService {
                     viewModel.selectItem(user)
                 }
                 .addOnFailureListener {
+                    reset()
                     Firebase.auth.signOut()
                     Toast.makeText(context, "Account creation failed!", Toast.LENGTH_LONG).show()
                 }
         }
 
-        fun addToWatchlist(email: String, movieName: String) {
-            getUser(email) { result ->
-                //Result contains the watchlist from current user
-            }
+        /*
+        * Adds movie to list inside of firestoreService and updates the corresponding users watchlist on firestore.
+        * */
+        fun addToWatchlist(movieName: String) {
+            currentWatchlist.add(movieName)
+            db.collection("users").document(currentUserId)
+                .update("watchlist", ArrayList<String>(currentWatchlist))
+                .addOnSuccessListener {
+                    Log.d("FirebaseService","Successfully saved movie")
+                }
+                .addOnFailureListener {
+                    Log.d("FirebaseService", "Failed to save movie")
+                }
+
+        }
+
+        fun getUserEmail(): String = currentUserEmail
+        fun getCurrentUserId(): String = currentUserId
+        fun getUsername(): String = currentUsername
+        fun getWatchlist(): MutableList<String> = currentWatchlist
+        fun setUserEmail(userEmail: String) {
+            currentUserEmail = userEmail
+        }
+        fun setCurrentUserId(id: String){
+            currentUserId = id
+        }
+
+        fun setUsername(username: String){
+            currentUsername = username
+        }
+        private fun reset(){
+            currentUserId = ""
+            currentUsername = ""
+            currentUserEmail = ""
+            currentWatchlist = mutableListOf()
         }
 
         // Adds user to User database in Room
