@@ -6,42 +6,47 @@
     android:orientation="vertical"
     android:paddingStart="20dp"
     android:paddingEnd="20dp">
-
     <TextView
         android:id="@+id/tvid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+<!--
     <TextView
         android:id="@+id/tvqid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+-->
     <TextView
         android:id="@+id/tvtitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light" />
 
 
     <TextView
         android:id="@+id/tvyear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light" />
 
     <TextView
         android:id="@+id/tvstars"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light" />
 
     <TextView
         android:id="@+id/tvq"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light" />
+<!-- Unless some plugin or additional feature needs the
+url from the xml
     <TextView
         android:id="@+id/imageURL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1sp"
