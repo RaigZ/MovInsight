@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.example.movinsight.API.SearchMovieResponse
 import com.example.movinsight.API.searchItem
 import com.example.movinsight.R
 import com.example.movinsight.RecyclerView.RVAdapter
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -37,6 +39,7 @@ class DisplayFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var recyclerView: RecyclerView
+    private lateinit var searchEntry: TextInputEditText
     lateinit var movieAdapter: RVAdapter
     private lateinit var root: View
     private lateinit var db: FirebaseFirestore
@@ -56,13 +59,14 @@ class DisplayFragment : Fragment() {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_display, container, false)
         recyclerView = root.findViewById(R.id.recyclerView)
+        searchEntry = root.findViewById(R.id.searchEntry)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         var movieAdapter = RVAdapter(emptyList())
         recyclerView.adapter = movieAdapter
         db = Firebase.firestore
 
         fun searchMovie(api: APIInterface, adapter: RVAdapter) {
-            val data = api.searchIMDB("Lordoftherings")
+            val data = api.searchIMDB(searchEntry.text?.toString() ?: "")
             data.enqueue(object: Callback<SearchMovieResponse> {
                 override fun onResponse(
                     call: Call<SearchMovieResponse>,
@@ -85,7 +89,14 @@ class DisplayFragment : Fragment() {
                 }
             })
         }
-        searchMovie(imdbAPI, movieAdapter)
+        searchEntry.setOnEditorActionListener { _, action, _ ->
+            Toast.makeText(context, ("Search: " + searchEntry.text?.toString()), Toast.LENGTH_LONG).show()
+            if(action == EditorInfo.IME_NULL) {
+                searchMovie(imdbAPI, movieAdapter)
+                return@setOnEditorActionListener true
+            }
+            false
+        }
         return root
     }
 
