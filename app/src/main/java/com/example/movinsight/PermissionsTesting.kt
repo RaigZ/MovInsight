@@ -27,6 +27,8 @@ class PermissionsTesting : AppCompatActivity() {
     var selectedImage : Uri? = null
     var selectedBitmap : Bitmap? = null
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permissions_testing)

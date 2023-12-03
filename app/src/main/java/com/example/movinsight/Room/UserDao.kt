@@ -1,5 +1,6 @@
 package com.example.movinsight.Room
 
+import android.graphics.Bitmap
 import androidx.room.*
 
 @Dao
@@ -16,6 +17,10 @@ interface UserDao {
     // Gets a user from database based on given username
     @Query("SELECT * FROM user WHERE username = :username")
     suspend fun getUser(username: String) : User
+
+    @Query("UPDATE user SET picture=:new_picture WHERE username LIKE :user_name")
+    suspend fun updatePP(new_picture: String, user_name: String)
+
 
 
 

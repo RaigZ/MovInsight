@@ -1,6 +1,7 @@
 package com.example.movinsight.API
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -224,7 +225,7 @@ class FirestoreService {
             ).build()
             //Log.d("FLAG 4", "DATABASE BUILT")
             val userDao = userDB.userDao() // Get UserDao
-            val roomUser = User(email, username, watchlist) // Create user based on given info
+            val roomUser = User(email, username, watchlist, "none") // Create user based on given info
             userDao.insertUser(roomUser) // Insert user into UserDatabase
         }
     }
