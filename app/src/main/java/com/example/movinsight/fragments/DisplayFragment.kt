@@ -66,7 +66,7 @@ class DisplayFragment : Fragment() {
         db = Firebase.firestore
 
         fun searchMovie(api: APIInterface, adapter: RVAdapter) {
-            val data = api.searchIMDB(searchEntry.text?.toString()?.replace("[\\s\\\\p{Z}]".toRegex(), "") ?: "")
+            val data = api.searchIMDB(searchEntry.text?.toString()?.replace("[\\s\\p{Z}]".toRegex(), "") ?: "")
             data.enqueue(object: Callback<SearchMovieResponse> {
                 override fun onResponse(
                     call: Call<SearchMovieResponse>,
