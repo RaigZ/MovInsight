@@ -66,7 +66,7 @@ class DisplayFragment : Fragment() {
         db = Firebase.firestore
 
         fun searchMovie(api: APIInterface, adapter: RVAdapter) {
-            val data = api.searchIMDB(searchEntry.text?.toString() ?: "")
+            val data = api.searchIMDB(searchEntry.text?.toString()?.replace("[\\s\\p{Z}]".toRegex(), "") ?: "")
             data.enqueue(object: Callback<SearchMovieResponse> {
                 override fun onResponse(
                     call: Call<SearchMovieResponse>,
@@ -91,7 +91,7 @@ class DisplayFragment : Fragment() {
         }
         searchEntry.setOnEditorActionListener { _, action, _ ->
             Toast.makeText(context, ("Search: " + searchEntry.text?.toString()), Toast.LENGTH_LONG).show()
-            if(action == EditorInfo.IME_NULL) {
+            if(action == EditorInfo.IME_ACTION_DONE) {
                 searchMovie(imdbAPI, movieAdapter)
                 return@setOnEditorActionListener true
             }
