@@ -19,8 +19,12 @@ interface UserDao {
     suspend fun getUser(username: String) : User
 
     // Updates a user's picture based on given username
-    @Query("UPDATE user SET picture=:new_picture WHERE username LIKE :user_name")
-    suspend fun updatePP(new_picture: String, user_name: String)
+    @Query("UPDATE user SET picture=:newpicture WHERE username LIKE :username")
+    suspend fun updatePP(newpicture: String, username: String)
+
+    // Updates a user's watchlist (whether adding/removing)
+    @Query("UPDATE user SET watchlist=:watchlist WHERE username LIKE :username")
+    suspend fun updateWatchlist(watchlist: ArrayList<String>, username: String)
 
 
 

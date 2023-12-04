@@ -191,7 +191,7 @@ class FirestoreService {
         /*
         * Adds movie to list inside of firestoreService and updates the corresponding users watchlist on firestore.
         * */
-        fun addToWatchlist(movieName: String) {
+        fun addToWatchlist(viewModel: UserViewModel, context: Context, movieName: String) {
             currentWatchlist.add(movieName)
             db.collection("users").document(currentUserId)
                 .update("watchlist", ArrayList<String>(currentWatchlist))
@@ -202,6 +202,15 @@ class FirestoreService {
                     Log.d("FirebaseService", "Failed to save movie")
                 }
 
+            // Add the movie to the user's watchlist in the Room database
+            viewModel.viewModelScope.launch {
+                val db = UserDatabase.getInstance(context)
+                val userDao = db.userDao()
+                val user = userDao.getUser(currentUsername)
+                val watchlist = userDao.getUser(user.username).watchlist
+                watchlist += movieName
+                userDao.updateWatchlist(watchlist, user.username)
+            }
         }
 
         fun getUserEmail(): String = currentUserEmail

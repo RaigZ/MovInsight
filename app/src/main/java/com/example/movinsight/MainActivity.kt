@@ -304,15 +304,22 @@ class MainActivity : AppCompatActivity() {
         */
 
         var watchlist = ArrayList<String>()
-        watchlist.add("movie1")
-        watchlist.add("movie2")
-        watchlist.add("movie3")
         val dummy = User("dummy", "dummy", watchlist, "none")
         userDao.insertUser(dummy)
-        //userDao.deleteUser(userDao.getAllUsers()[3])
         userDao.deleteUser(userDao.getUser(dummy.username))
 
-        //userDao.deleteUser(userDao.getUser("guy100@gmail.com"))
 
+
+        // FOR ADDING MOVIES
+        //val watchlist = userDao.getUser("dummy").watchlist
+        //watchlist += "Equilibrium"
+        //watchlist += "John Wick"
+        //watchlist += "The Equalizer"
+        //userDao.updateWatchlist(watchlist, "dummy")
+
+        // FOR DELETING MOVIES
+        //val watchlist = userDao.getUser("dummy").watchlist
+        //watchlist.remove("Equilibrium")
+        //userDao.updateWatchlist(watchlist, "dummy")
     }
 }

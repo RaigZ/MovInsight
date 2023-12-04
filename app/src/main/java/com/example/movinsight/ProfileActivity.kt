@@ -46,7 +46,6 @@ class ProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val db = UserDatabase.getInstance(applicationContext)
             val userDao = db.userDao()
-            //val user = userDao.getUser("heisenberg") // TODO: Don't hardcore the username, do it based on current user
             val user = userDao.getUser(FirestoreService.getUsername())
 
             if(user.picture == "none" || user.picture == "" || user.picture == " ")
@@ -108,7 +107,6 @@ class ProfileActivity : AppCompatActivity() {
             val userDao = db.userDao()
             val encoded: String = encodeImage(selectedBitmap)
             val user = userDao.getUser(FirestoreService.getUsername())
-            //userDao.updatePP(encoded, "heisenberg") // TODO: Don't hardcore the username, do it based on current user
             userDao.updatePP(encoded, user.username)
         }
 

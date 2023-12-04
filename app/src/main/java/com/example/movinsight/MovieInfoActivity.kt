@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import com.example.movinsight.API.FirestoreService
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -15,6 +16,9 @@ import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 class MovieInfoActivity : AppCompatActivity() {
+
+    private val userModel: UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
@@ -44,7 +48,7 @@ class MovieInfoActivity : AppCompatActivity() {
             .into(imageView)
 
         addToWatchlist.setOnClickListener {
-            FirestoreService.addToWatchlist(title.toString())
+            FirestoreService.addToWatchlist(userModel, this, title.toString())
         }
     }
 }
