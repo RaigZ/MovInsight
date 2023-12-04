@@ -36,29 +36,22 @@ class ProfileActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
 
+        // User selects the "Edit Avatar" button
         findViewById<Button>(R.id.profile_button).setOnClickListener {
+            // Go through permissions, make user select photo through gallery
             selectImage()
-
-            // TODO: Bug where you have to select the image twice in order for it to fully save to the database
-            lifecycleScope.launch {
-                val db = UserDatabase.getInstance(applicationContext)
-                val userDao = db.userDao()
-                Log.d("ProfileActivity", "Starting to encode.")
-                val encoded: String = encodeImage(selectedBitmap)
-                Log.d("ProfileActivity", "End of encoding.")
-                userDao.updatePP(encoded, "heisenberg")
-                Log.d("ProfileActivity", "Updated database.")
-            }
         }
 
+        // Applies the user's photo immediately if they have one saved
         lifecycleScope.launch {
             val db = UserDatabase.getInstance(applicationContext)
             val userDao = db.userDao()
-            val user = userDao.getUser("heisenberg")
+            //val user = userDao.getUser("heisenberg") // TODO: Don't hardcore the username, do it based on current user
+            val user = userDao.getUser(FirestoreService.getUsername())
 
             if(user.picture == "none" || user.picture == "" || user.picture == " ")
             {
-                Log.d("ProfileActivity", "User has no selected picture.")
+                Log.d("ProfileActivity", user.username + " has no selected picture.")
             }
             else
             {
@@ -67,6 +60,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    // Encodes the image into a string so it can be stored in the database
     private fun encodeImage(bitmap: Bitmap?) : String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
@@ -74,6 +68,7 @@ class ProfileActivity : AppCompatActivity() {
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 
+    // Decodes the image from a string back to a bitmap so it can be displayed
     private fun decodeImage(string: String) : Bitmap {
         val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
         val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
@@ -106,6 +101,17 @@ class ProfileActivity : AppCompatActivity() {
         }
         selectedBitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImage)
         findViewById<ImageView>(R.id.profile_image).setImageBitmap(selectedBitmap)
+
+        // Update the user's picture in the database
+        lifecycleScope.launch {
+            val db = UserDatabase.getInstance(applicationContext)
+            val userDao = db.userDao()
+            val encoded: String = encodeImage(selectedBitmap)
+            val user = userDao.getUser(FirestoreService.getUsername())
+            //userDao.updatePP(encoded, "heisenberg") // TODO: Don't hardcore the username, do it based on current user
+            userDao.updatePP(encoded, user.username)
+        }
+
         super.onActivityResult(requestCode, resultCode, data)
     }
 }

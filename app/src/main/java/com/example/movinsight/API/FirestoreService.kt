@@ -47,15 +47,17 @@ class FirestoreService {
                             currentWatchlist = (document.get("watchlist") as List<String>).toMutableList()
                             viewModel.selectItem(user)
 
-                            //Room
+
+                            // Insert user into the Room database
                             viewModel.viewModelScope.launch {
-                                //Log.d("FLAG 2", "RIGHT BEFORE FUNCTION CALL")
-                                addUserToRoomDB(document.getString("email") as String,
+                                addUserToRoomDB(
                                     document.getString("username") as String,
+                                    document.getString("email") as String,
                                     document.get("watchlist") as ArrayList<String>,
-                                    context)
-                                //Log.d("FLAG 5", "FUNCTION FULLY EXECUTED")
+                                    context
+                                )
                             }
+
                         }
                     }
                     .addOnFailureListener {
@@ -107,16 +109,14 @@ class FirestoreService {
                             }
                             viewModel.selectItem(user)
 
-                            //Log.d("FLAG 1", "BEFORE ENTERING COROUTINE")
+                            /*
                             // Insert user into the Room database
                             viewModel.viewModelScope.launch {
-                                //Log.d("FLAG 2", "RIGHT BEFORE FUNCTION CALL")
                                 addUserToRoomDB(query.get("email") as String,
                                     query.get("username") as String,
                                     query.get("watchlist") as ArrayList<String>,
                                     context)
-                                //Log.d("FLAG 5", "FUNCTION FULLY EXECUTED")
-                            }
+                            }*/
                             //currentUserEmail = query.get("email") as String ?: ""
                             //currentDocId = query.id
                         }
@@ -154,6 +154,16 @@ class FirestoreService {
                         Toast.makeText(context, "Account creation failed!", Toast.LENGTH_LONG).show()
                     }
                 }
+            /*
+            // Insert user into the Room database
+            viewModel.viewModelScope.launch {
+                addUserToRoomDB(
+                    username,
+                    email,
+                    context
+                )
+            }
+            */
             return
         }
 
@@ -216,16 +226,12 @@ class FirestoreService {
         }
 
         // Adds user to User database in Room
-        private suspend fun addUserToRoomDB(email: String, username: String, watchlist: ArrayList<String>, context: Context)
+        private suspend fun addUserToRoomDB(username: String, email: String, watchlist: ArrayList<String>, context: Context)
         {
-            //Log.d("FLAG 3", "FUNCTION ENTERED")
-            val userDB = Room.databaseBuilder(
-                context,
-                UserDatabase::class.java, "user"
-            ).build()
-            //Log.d("FLAG 4", "DATABASE BUILT")
-            val userDao = userDB.userDao() // Get UserDao
-            val roomUser = User(email, username, watchlist, "none") // Create user based on given info
+            val db = UserDatabase.getInstance(context)
+            val userDao = db.userDao()
+            //val watchlist: ArrayList<String> = ArrayList()
+            val roomUser = User(username, email, watchlist, "none") // Create user based on given info
             userDao.insertUser(roomUser) // Insert user into UserDatabase
         }
     }

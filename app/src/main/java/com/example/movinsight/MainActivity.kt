@@ -309,8 +309,10 @@ class MainActivity : AppCompatActivity() {
         watchlist.add("movie3")
         val dummy = User("dummy", "dummy", watchlist, "none")
         userDao.insertUser(dummy)
-        userDao.deleteUser(userDao.getAllUsers()[3])
+        //userDao.deleteUser(userDao.getAllUsers()[3])
+        userDao.deleteUser(userDao.getUser(dummy.username))
 
+        //userDao.deleteUser(userDao.getUser("guy100@gmail.com"))
 
     }
 }
