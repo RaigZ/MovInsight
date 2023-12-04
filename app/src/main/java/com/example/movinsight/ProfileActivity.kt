@@ -53,6 +53,10 @@ class ProfileActivity : AppCompatActivity() {
             selectImage()
         }
 
+        updateButton.setOnClickListener {
+            handleUpdate()
+        }
+
         // Applies the user's photo immediately if they have one saved
         lifecycleScope.launch {
             val db = UserDatabase.getInstance(applicationContext)
@@ -123,9 +127,6 @@ class ProfileActivity : AppCompatActivity() {
 
         super.onActivityResult(requestCode, resultCode, data)
 
-        updateButton.setOnClickListener {
-            handleUpdate()
-        }
     }
 
     private fun handleUpdate() {
@@ -148,7 +149,7 @@ class ProfileActivity : AppCompatActivity() {
                 user.updatePassword(newPassword).addOnCompleteListener { passwordUpdateTask ->
                     if (passwordUpdateTask.isSuccessful) {
                         // Password updated successfully
-                        Toast.makeText(this, "Email and Password updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Password updated successfully", Toast.LENGTH_SHORT).show()
                     } else {
                         // Handle password update failure
                         Log.e("ProfileActivity", "Failed to update password: ${passwordUpdateTask.exception?.message}")
