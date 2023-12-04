@@ -62,6 +62,14 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change your password"
+            android:textColor="#090909"
+            android:textSize="20dp" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:hint="Email"
             android:id="@+id/email_profile"
@@ -90,6 +98,7 @@
 
 
         <Button
+            android:id="@+id/update_button"
             android:background="#fece2f"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
