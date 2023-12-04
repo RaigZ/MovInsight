@@ -75,4 +75,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.1")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    //test mock
+    testImplementation("org.mockito:mockito-core:2.19.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
 }
