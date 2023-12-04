@@ -1,6 +1,10 @@
 package com.example.movinsight
 
+import android.widget.EditText
+import android.widget.TextView
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import org.junit.Test
+import androidx.appcompat.app.AppCompatActivity
 
 import org.junit.Assert.*
 
@@ -14,4 +18,5 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
 }
