@@ -2,6 +2,7 @@ package com.example.movinsight
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -56,11 +57,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         // ROOM TEST - OPEN DB
         val db = Room.databaseBuilder(
             applicationContext,
             UserDatabase::class.java, "user"
         ).build()
+
 
         //If user is still logged in, display email(*username later),
         //and change visibility for login/signup/sign-out buttons
@@ -197,14 +200,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /*
+
         // ROOM TEST - CLICK TO ADD USER TO DB
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
             lifecycleScope.launch { // coroutine on Main
                 insertUserToRoomDB(db)
             }
         }
-        */
+
     }
 
     private fun changeFragment(fragment: Fragment) {
@@ -274,6 +277,7 @@ class MainActivity : AppCompatActivity() {
     // Note to self: The database only opens when a change is made
     // Testing the Room database
     private suspend fun insertUserToRoomDB(db : UserDatabase) {
+
         val userDao = db.userDao()
 
         /*
@@ -281,32 +285,41 @@ class MainActivity : AppCompatActivity() {
         watchlist1.add("movie1")
         watchlist1.add("movie2")
         watchlist1.add("movie3")
-        val user1 = User("heisenberg", "oneWhoKnocks@gmail.com", watchlist1)
+        val user1 = User("heisenberg", "oneWhoKnocks@gmail.com", watchlist1, "none")
         userDao.insertUser(user1)
 
         var watchlist2 = ArrayList<String>()
         watchlist2.add("movie1")
         watchlist2.add("movie2")
         watchlist2.add("movie3")
-        val user2 = User("pinkman", "chiliPowder@gmail.com", watchlist2)
+        val user2 = User("pinkman", "chiliPowder@gmail.com", watchlist2, "none")
         userDao.insertUser(user2)
 
         var watchlist3 = ArrayList<String>()
         watchlist3.add("movie1")
         watchlist3.add("movie2")
         watchlist3.add("movie3")
-        val user3 = User("goodman", "slippinJimmy@gmail.com", watchlist3)
+        val user3 = User("goodman", "slippinJimmy@gmail.com", watchlist3, "none")
         userDao.insertUser(user3)
         */
 
-        /*
         var watchlist = ArrayList<String>()
-        watchlist.add("movie1")
-        watchlist.add("movie2")
-        watchlist.add("movie3")
-        val dummy = User("dummy", "dummy", watchlist)
+        val dummy = User("dummy", "dummy", watchlist, "none")
         userDao.insertUser(dummy)
-        userDao.deleteUser(userDao.getAllUsers()[0])
-        */
+        userDao.deleteUser(userDao.getUser(dummy.username))
+
+
+
+        // FOR ADDING MOVIES
+        //val watchlist = userDao.getUser("dummy").watchlist
+        //watchlist += "Equilibrium"
+        //watchlist += "John Wick"
+        //watchlist += "The Equalizer"
+        //userDao.updateWatchlist(watchlist, "dummy")
+
+        // FOR DELETING MOVIES
+        //val watchlist = userDao.getUser("dummy").watchlist
+        //watchlist.remove("Equilibrium")
+        //userDao.updateWatchlist(watchlist, "dummy")
     }
 }
