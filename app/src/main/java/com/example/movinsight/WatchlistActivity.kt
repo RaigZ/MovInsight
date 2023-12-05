@@ -33,7 +33,7 @@ class WatchlistActivity : AppCompatActivity() {
     }
 
     private class WatchlistActivityAdapter(): RecyclerView.Adapter<WatchlistActivityAdapter.ViewHolder>() {
-        private val watchlist: List<String> = FirestoreService.getWatchlist()
+        private val watchlist: MutableList<String> = FirestoreService.getWatchlist()
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -54,17 +54,31 @@ class WatchlistActivity : AppCompatActivity() {
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val movieName: TextView = itemView.findViewById(R.id.movieName)
+            val deleteMovie: Button = itemView.findViewById(R.id.deleteMovie)
 
             init {
                 itemView.setOnClickListener {
                     val item = watchlist[adapterPosition]
-
                     val intent = Intent(itemView.context, MovieInfoActivity::class.java)
                     intent.putExtra("title", item)
                     itemView.context.startActivity(intent)
                 }
+                itemView.findViewById<Button>(R.id.deleteMovie).setOnClickListener{
+                    val item = watchlist[adapterPosition]
+                    watchlist.removeAt(adapterPosition)
+                    Log.d("WatchlistRecycler", "$watchlist")
+                    FirestoreService.setWatchlist(watchlist)
+                    FirestoreService.updateWatchlist() {updateSuccessful ->
+                        if(updateSuccessful){
+                            notifyDataSetChanged()
+                        } else {
+                            Toast.makeText(itemView.context, "Error deleting movie", Toast.LENGTH_LONG)
+                        }
+                    }
+                }
             }
         }
+
 
     } 
 }

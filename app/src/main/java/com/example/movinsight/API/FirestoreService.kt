@@ -213,10 +213,26 @@ class FirestoreService {
             }
         }
 
+        fun updateWatchlist(callback: (Boolean) -> Unit){
+            db.collection("users").document(currentUserId)
+                .update("watchlist", ArrayList<String>(currentWatchlist))
+                .addOnSuccessListener {
+                    Log.d("FirebaseService", "Updated watchlist")
+                    callback(true)
+                }
+                .addOnFailureListener {
+                    Log.d("FirebaseService", "Could not update watchlist")
+                    callback(false)
+                }
+        }
+
         fun getUserEmail(): String = currentUserEmail
         fun getCurrentUserId(): String = currentUserId
         fun getUsername(): String = currentUsername
         fun getWatchlist(): MutableList<String> = currentWatchlist
+        fun setWatchlist(watchlist: MutableList<String>) {
+            currentWatchlist = watchlist
+        }
         fun setUserEmail(userEmail: String) {
             currentUserEmail = userEmail
         }
@@ -227,7 +243,7 @@ class FirestoreService {
         fun setUsername(username: String){
             currentUsername = username
         }
-        /*private*/ fun reset(){
+        fun reset(){
             currentUserId = ""
             currentUsername = ""
             currentUserEmail = ""
