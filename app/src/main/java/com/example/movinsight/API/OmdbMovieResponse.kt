@@ -7,7 +7,7 @@ data class OmdbMovieResponse(
     val Released: String,
     val Genre: String,
     val Director: String,
-    val Writers: String,
+    val Writer: String,
     val Actors: String,
     val Plot: String,
     val Language: String,

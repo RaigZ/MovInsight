@@ -51,11 +51,11 @@ class MovieInfoActivity : AppCompatActivity() {
         if(title == null){
             Toast.makeText(this, "Unable to load movie details!", Toast.LENGTH_LONG)
             finish()
+        } else {
+            searchOMDB(title, imageView, listView, this)
         }
 
-        Log.d("MovieInfoAct", "${intent.getStringExtra("id")}")
-        Log.d("MovieInfoAct", "${intent.getStringExtra("userId")}")
-        Log.d("MovieInfoAct", "${intent.getStringExtra("title")}")
+
 
         // NOTIFICATION
         fun createNotificationChannel() {
@@ -91,17 +91,19 @@ class MovieInfoActivity : AppCompatActivity() {
         addToWatchlist.setOnClickListener {
             if(FirestoreService.getUsername() != "")
             {
-                FirestoreService.addToWatchlist(userModel, this, title.toString())
-                sendNotification()
+                FirestoreService.addToWatchlist(userModel, this, title.toString()) {updateSuccessful ->
+                    if(updateSuccessful){
+                        sendNotification()
+                    } else {
+                        Toast.makeText(this, "Could not add movie to watchlist", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                //sendNotification()
             }
             else
             {
                 Toast.makeText(this, "Must be logged in to add to watchlist.", Toast.LENGTH_LONG).show()
             }
-        }
-
-        if (title != null) {
-            searchOMDB(title, imageView, listView, this)
         }
     }
     private fun searchOMDB(name: String, imageView: ImageView, listView: ListView, context: Context) {
@@ -118,13 +120,12 @@ class MovieInfoActivity : AppCompatActivity() {
                         apiResponse?.Released,
                         apiResponse?.Genre,
                         apiResponse?.Director,
-                        apiResponse?.Writers,
+                        apiResponse?.Writer,
                         apiResponse?.Actors,
                         apiResponse?.Plot,
                         apiResponse?.Language,
                         apiResponse?.imdbRating
                     ).mapNotNull { it }
-
                     listView.adapter = MovieActivityAdapter(context, movieData, labels)
 
                     Log.d("TestOMDB", "${apiResponse}")
@@ -177,11 +178,13 @@ class MovieInfoActivity : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val layoutInflater = LayoutInflater.from(movieContext)
             val row = layoutInflater.inflate(R.layout.movie_row, parent, false)
+
             val tvLabel = row.findViewById<TextView>(R.id.tvLabel)
             val tvMovieInfo = row.findViewById<TextView>(R.id.tvMovieInfo)
 
             tvLabel.text = movieLabels[position]
             tvMovieInfo.text = movieList[position]
+
             return row
         }
 

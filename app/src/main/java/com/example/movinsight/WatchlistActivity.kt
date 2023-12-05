@@ -20,6 +20,8 @@ class WatchlistActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_watchlist)
+        val username = findViewById<TextView>(R.id.tvWatchlist)
+        username.text = FirestoreService.getUsername() + " watchlist"
 
         val recyclerView: RecyclerView = findViewById(R.id.watchlistRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
