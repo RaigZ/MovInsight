@@ -105,10 +105,10 @@ class MainActivity : AppCompatActivity() {
             usernameField.text = item["username"].toString()
 
             //Change visibility for login/sign-up/sign-out buttons
-            /*findViewById<Button>(R.id.loginButton).visibility = View.GONE
+            findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
             findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
-            */
+
 
             //Change this to MainFragment
             changeFragment(DisplayFragment)

@@ -66,13 +66,15 @@ class RVAdapter(private var dataList: List<searchItem>) : RecyclerView.Adapter<R
                 Log.d("In RVAdapter", item.image)
 
                 val intent = Intent(itemView.context, MovieInfoActivity::class.java)
+                intent.putExtra("title", item.title)
+                /*
                 intent.putExtra("id", item.id)
                 intent.putExtra("qid", item.qid)
-                intent.putExtra("title", item.title)
                 intent.putExtra("year", item.year.toString())
                 intent.putExtra("stars", item.stars)
                 intent.putExtra("q", item.q)
                 intent.putExtra("image", item.image)
+                 */
                 itemView.context.startActivity(intent)
                 Toast.makeText(itemView.context, "You have clicked $item", Toast.LENGTH_LONG).show()
             }

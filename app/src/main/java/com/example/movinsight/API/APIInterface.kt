@@ -19,4 +19,9 @@ interface APIInterface {
         @Query("query") query: String,
         @Header("X-RapidAPI-Key") key: String = com.example.movinsight.BuildConfig.RAPID_API_KEY
     ): Call<SearchMovieResponse>
+
+    @GET("?apikey=${com.example.movinsight.BuildConfig.OMDB_API_KEY}")
+    fun searchOMDB(
+        @Query("t") query: String,
+    ): Call <OmdbMovieResponse>
 }

@@ -1,48 +1,70 @@
 package com.example.movinsight
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.movinsight.API.FirestoreService
+import org.w3c.dom.Text
 
 class WatchlistActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_watchlist)
 
+        val recyclerView: RecyclerView = findViewById(R.id.watchlistRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val customAdapter = WatchlistActivityAdapter()
+
         findViewById<Button>(R.id.back_button).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
-        //get_watchlist()
+        Log.d("WatchlistActivity", "${FirestoreService.getWatchlist()}")
+        recyclerView.adapter = customAdapter
     }
 
-    //API watchlist -- where to get movies and display to recyclerview
-    //old code. going to go base off this
-    /*private fun get_watchlist() {
-        val myList = mutableListOf<DataAPIItem>()
-        var count = 0
-        val db = FirebaseFirestore.getInstance()
-        db.collection("users")
-            .get()
-            .addOnCompleteListener {
-                val result: StringBuffer = StringBuffer()
-                if (it.isSuccessful) {
-                    for (document in it.result!!) {
-                        val complete = "${document.data.getValue("completed")}".toBoolean()
-                        val id = "${document.data.getValue("id")}".toInt()
-                        val title = "${document.data.getValue("title")}"
-                        val userId = "${document.data.getValue("userId")}".toInt()
-                        val item = DataAPIItem(complete, id, title, userId)
-                        myList.add(item)
-                        count++
-                        /*val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
-                        recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-                        recyclerView.adapter = RVAdapter(myList)*/
-                    }
-                    val recyclerView: RecyclerView = findViewById(R.id.recyclerview)
-                    recyclerView.layoutManager = LinearLayoutManager(applicationContext)
-                    recyclerView.adapter = RVAdapter(myList)
+    private class WatchlistActivityAdapter(): RecyclerView.Adapter<WatchlistActivityAdapter.ViewHolder>() {
+        private val watchlist: List<String> = FirestoreService.getWatchlist()
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): WatchlistActivityAdapter.ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.watchlist_row, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: WatchlistActivityAdapter.ViewHolder, position: Int) {
+            val item = watchlist[position]
+            holder.movieName.text = item
+        }
+
+        override fun getItemCount(): Int {
+            return watchlist.size
+        }
+
+        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val movieName: TextView = itemView.findViewById(R.id.movieName)
+
+            init {
+                itemView.setOnClickListener {
+                    val item = watchlist[adapterPosition]
+
+                    val intent = Intent(itemView.context, MovieInfoActivity::class.java)
+                    intent.putExtra("title", item)
+                    itemView.context.startActivity(intent)
                 }
             }
-    }*/
+        }
+
+    } 
 }

@@ -1,19 +1,27 @@
 package com.example.movinsight
 
-import android.content.Intent
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.example.movinsight.API.APIService
 import com.example.movinsight.API.FirestoreService
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.example.movinsight.API.OmdbMovieResponse
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MovieInfoActivity : AppCompatActivity() {
 
@@ -22,33 +30,29 @@ class MovieInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
+
+        //Go back to previous activity
         findViewById<Button>(R.id.backButton).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
         }
 
         val intent = intent
-        val addToWatchlist: Button = findViewById(R.id.addMovie)
-
-        val id = intent.getStringExtra("id")
-        val userId = intent.getStringExtra("userId")
         val title = intent.getStringExtra("title")
+
+        val addToWatchlist: Button = findViewById(R.id.addMovie)
         val imageView: ImageView = findViewById(R.id.movieImage)
-        findViewById<TextView>(R.id.showId).text = "ID: " + id // Why do we have to show this id in particular? The UserId below makes sense but why this one?
-        findViewById<TextView>(R.id.showUserId).text = "UserID: " + userId
-        findViewById<TextView>(R.id.showTitle).text = "Title: " + title
+        val listView = findViewById<ListView>(R.id.movieList)
 
-        Log.d("RemoteActivity", "${intent.getStringExtra("id")}")
-        Log.d("RemoteActivity", "${intent.getStringExtra("userId")}")
-        Log.d("RemoteActivity", "${intent.getStringExtra("title")}")
+        if(title == null){
+            Toast.makeText(this, "Unable to load movie details!", Toast.LENGTH_LONG)
+            finish()
+        }
 
-        Picasso.get()
-            .load(intent.getStringExtra("image"))
-            .resize(620, 950)
-            .centerCrop()
-            .into(imageView)
+        Log.d("MovieInfoAct", "${intent.getStringExtra("id")}")
+        Log.d("MovieInfoAct", "${intent.getStringExtra("userId")}")
+        Log.d("MovieInfoAct", "${intent.getStringExtra("title")}")
 
         addToWatchlist.setOnClickListener {
-            //FirestoreService.addToWatchlist(userModel, this, title.toString())
             if(FirestoreService.getUsername() != "")
             {
                 FirestoreService.addToWatchlist(userModel, this, title.toString())
@@ -58,5 +62,91 @@ class MovieInfoActivity : AppCompatActivity() {
                 Toast.makeText(this, "Must be logged in to add to watchlist.", Toast.LENGTH_LONG).show()
             }
         }
+
+        if (title != null) {
+            searchOMDB(title, imageView, listView, this)
+        }
+    }
+    private fun searchOMDB(name: String, imageView: ImageView, listView: ListView, context: Context) {
+        val data = APIService.omdbAPI.searchOMDB(name)
+        data.enqueue(object: Callback<OmdbMovieResponse> {
+            override fun onResponse(call: Call<OmdbMovieResponse>, response: Response<OmdbMovieResponse>) {
+                if (response.isSuccessful) {
+                    val apiResponse = response.body()
+                    val labels = listOf("Title", "Year", "Rated", "Released", "Genre", "Director", "Writers", "Actors", "Plot", "Language", "imdbRating")
+                    val movieData = listOf(
+                        apiResponse?.Title,
+                        apiResponse?.Year,
+                        apiResponse?.Rated,
+                        apiResponse?.Released,
+                        apiResponse?.Genre,
+                        apiResponse?.Director,
+                        apiResponse?.Writers,
+                        apiResponse?.Actors,
+                        apiResponse?.Plot,
+                        apiResponse?.Language,
+                        apiResponse?.imdbRating
+                    ).mapNotNull { it }
+
+                    listView.adapter = MovieActivityAdapter(context, movieData, labels)
+
+                    Log.d("TestOMDB", "${apiResponse}")
+
+                    //Loading image
+                    Picasso.get()
+                        .load(apiResponse?.Poster)
+                        .resize(620, 950)
+                        .centerCrop()
+                        .into(imageView)
+
+                } else {
+                    //Add toast
+                    // Log the error response
+                    Log.e("TestOMDBError", response.errorBody()?.string() ?: "Unknown error")
+                    finish()
+                }
+            }
+
+            override fun onFailure(call: Call<OmdbMovieResponse>, t: Throwable) {
+                Log.d("TestOMDB_FAIL", "message" +  t.message)
+            }
+
+        })
+    }
+
+    private class MovieActivityAdapter(context: Context, mList: List<String>, labels: List<String>): BaseAdapter() {
+        private val movieContext: Context
+        private val movieList: List<String>
+        private val movieLabels: List<String>
+
+        init {
+            movieContext = context
+            movieList = mList
+            movieLabels = labels
+        }
+
+        override fun getCount(): Int {
+            return movieList.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return ""
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val layoutInflater = LayoutInflater.from(movieContext)
+            val row = layoutInflater.inflate(R.layout.movie_row, parent, false)
+            val tvLabel = row.findViewById<TextView>(R.id.tvLabel)
+            val tvMovieInfo = row.findViewById<TextView>(R.id.tvMovieInfo)
+
+            tvLabel.text = movieLabels[position]
+            tvMovieInfo.text = movieList[position]
+            return row
+        }
+
     }
 }

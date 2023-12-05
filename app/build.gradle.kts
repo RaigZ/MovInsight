@@ -26,6 +26,7 @@ android {
     buildTypes {
         release {
             buildConfigField("String", "RAPID_API_KEY", "\"<Replace with api key>\"")
+            buildConfigField("String", "OMDB_API_KEY", "\"<Replace with api key>\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -34,6 +35,7 @@ android {
         }
         debug {
             buildConfigField("String", "RAPID_API_KEY", "\"<Replace with api key>\"")
+            buildConfigField("String", "OMDB_API_KEY", "\"<Replace with api key>\"")
         }
     }
     compileOptions {
