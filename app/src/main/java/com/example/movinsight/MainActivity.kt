@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -141,6 +142,9 @@ class MainActivity : AppCompatActivity() {
                 //Log out of firebase auth provider
                 auth.signOut()
 
+                // Reset the user currently using the app
+                FirestoreService.reset()
+
                 //Change visibility for login/sign-up/sign-out buttons
                 findViewById<Button>(R.id.signupButton).visibility = View.VISIBLE
                 findViewById<Button>(R.id.loginButton).visibility = View.VISIBLE
@@ -185,7 +189,16 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.ic_profile -> {
-                    changeActivity(profileActivity)
+                    if(FirestoreService.getUsername() != "")
+                    {
+                        changeActivity(profileActivity)
+                        true
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Must be logged in to access Profile.", Toast.LENGTH_LONG).show()
+                    }
+                    //changeActivity(profileActivity)
                     true
                 }
                 /*R.id.ic_settings -> {

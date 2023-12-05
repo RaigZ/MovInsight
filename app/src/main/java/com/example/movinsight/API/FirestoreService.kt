@@ -227,7 +227,7 @@ class FirestoreService {
         fun setUsername(username: String){
             currentUsername = username
         }
-        private fun reset(){
+        /*private*/ fun reset(){
             currentUserId = ""
             currentUsername = ""
             currentUserEmail = ""
