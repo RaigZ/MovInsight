@@ -48,7 +48,15 @@ class MovieInfoActivity : AppCompatActivity() {
             .into(imageView)
 
         addToWatchlist.setOnClickListener {
-            FirestoreService.addToWatchlist(userModel, this, title.toString())
+            //FirestoreService.addToWatchlist(userModel, this, title.toString())
+            if(FirestoreService.getUsername() != "")
+            {
+                FirestoreService.addToWatchlist(userModel, this, title.toString())
+            }
+            else
+            {
+                Toast.makeText(this, "Must be logged in to add to watchlist.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }

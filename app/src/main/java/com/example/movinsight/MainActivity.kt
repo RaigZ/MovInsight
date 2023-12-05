@@ -206,7 +206,16 @@ class MainActivity : AppCompatActivity() {
                     true
                 }*/
                 R.id.ic_watchlist -> {
-                    changeActivity(watchlistActivity)
+                    if(FirestoreService.getUsername() != "")
+                    {
+                        changeActivity(watchlistActivity)
+                        true
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Must be logged in to access Watchlist.", Toast.LENGTH_LONG).show()
+                    }
+                    //changeActivity(watchlistActivity)
                     true
                 }
                 else -> false
