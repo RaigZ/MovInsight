@@ -1,6 +1,10 @@
 package com.example.movinsight
 
+import android.app.AlertDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +18,12 @@ import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.movinsight.API.APIService
 import com.example.movinsight.API.FirestoreService
 import com.example.movinsight.API.OmdbMovieResponse
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,10 +57,42 @@ class MovieInfoActivity : AppCompatActivity() {
         Log.d("MovieInfoAct", "${intent.getStringExtra("userId")}")
         Log.d("MovieInfoAct", "${intent.getStringExtra("title")}")
 
+        // NOTIFICATION
+        fun createNotificationChannel() {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val channel: NotificationChannel = NotificationChannel("C10", "watchlistNotify", NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    var description = "Description"
+                }
+                val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            }
+        }
+
+        fun showAlert(title: String) {
+            AlertDialog.Builder(this)
+                .setTitle("New watchlist item")
+                .setMessage("$title has been added to your watchlist.")
+                .setPositiveButton("Okay"){_,_ ->}
+                .show()
+        }
+
+        //noinspection MissingPermission
+        fun sendNotification() {
+            showAlert(title.toString())
+            val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "C10")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(title)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            with(NotificationManagerCompat.from(this)) {
+                notify(10, builder.build())
+            }
+        }
+
+        createNotificationChannel()
         addToWatchlist.setOnClickListener {
             if(FirestoreService.getUsername() != "")
             {
                 FirestoreService.addToWatchlist(userModel, this, title.toString())
+                sendNotification()
             }
             else
             {
