@@ -60,7 +60,7 @@
             android:layout_marginTop="32dp"
             android:backgroundTint="#000000"
             android:text="@string/login"
-            android:textColor="#42CD95"
+            android:textColor="#4961db"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputLoginLayout"
             app:layout_constraintStart_toStartOf="@+id/passwordInputLoginLayout"
