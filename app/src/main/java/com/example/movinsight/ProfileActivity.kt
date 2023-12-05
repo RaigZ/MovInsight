@@ -26,8 +26,8 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ProfileActivity : AppCompatActivity() {
 
-    var selectedImage : Uri? = null
-    var selectedBitmap : Bitmap? = null
+    var selectedImage: Uri? = null
+    var selectedBitmap: Bitmap? = null
 
     private lateinit var emailProfileLayout: TextInputLayout
     private lateinit var passwordProfileLayout: TextInputLayout
@@ -63,19 +63,16 @@ class ProfileActivity : AppCompatActivity() {
             val userDao = db.userDao()
             val user = userDao.getUser(FirestoreService.getUsername())
 
-            if(user.picture == "none" || user.picture == "" || user.picture == " ")
-            {
+            if (user.picture == "none" || user.picture == "" || user.picture == " ") {
                 Log.d("ProfileActivity", user.username + " has no selected picture.")
-            }
-            else
-            {
+            } else {
                 findViewById<ImageView>(R.id.profile_image).setImageBitmap(decodeImage(user.picture))
             }
         }
     }
 
     // Encodes the image into a string so it can be stored in the database
-    private fun encodeImage(bitmap: Bitmap?) : String {
+    private fun encodeImage(bitmap: Bitmap?): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
@@ -83,26 +80,34 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     // Decodes the image from a string back to a bitmap so it can be displayed
-    private fun decodeImage(string: String) : Bitmap {
+    private fun decodeImage(string: String): Bitmap {
         val decodedString: ByteArray = Base64.decode(string, Base64.DEFAULT)
         val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         return decodedByte
     }
 
     fun selectImage() {
-        if(ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                applicationContext,
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissions(arrayOf(android.Manifest.permission.READ_MEDIA_IMAGES), 1)
-        }
-        else {
+        } else {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(intent, 2)
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if(requestCode == 1) {
-            if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 1) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val intent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 startActivityForResult(intent, 2)
             }
         }
@@ -110,7 +115,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             selectedImage = data.data
         }
         selectedBitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImage)
@@ -134,33 +139,38 @@ class ProfileActivity : AppCompatActivity() {
         val newPassword = passwordProfileLayout.editText?.text.toString()
 
         if (newEmail.isNotEmpty() && newPassword.isNotEmpty()) {
-            updateEmailAndPassword(newEmail, newPassword)
+            updatePassword(newEmail, newPassword)
         } else {
             Toast.makeText(this, "Email and password cannot be empty", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun updateEmailAndPassword(newEmail: String, newPassword: String) {
+    private fun updatePassword(newEmail: String, newPassword: String) {
         val user = FirebaseAuth.getInstance().currentUser
 
-        user?.updateEmail(newEmail)?.addOnCompleteListener { emailUpdateTask ->
-            if (emailUpdateTask.isSuccessful) {
-                // Email updated successfully, now update password
-                user.updatePassword(newPassword).addOnCompleteListener { passwordUpdateTask ->
-                    if (passwordUpdateTask.isSuccessful) {
-                        // Password updated successfully
-                        Toast.makeText(this, "Password updated successfully", Toast.LENGTH_SHORT).show()
-                    } else {
-                        // Handle password update failure
-                        Log.e("ProfileActivity", "Failed to update password: ${passwordUpdateTask.exception?.message}")
-                        Toast.makeText(this, "Failed to update password", Toast.LENGTH_SHORT).show()
-                    }
+        // Check if the provided new email matches the current user's email
+        if (user?.email == newEmail) {
+            // The provided email matches the current user's email
+            user.updatePassword(newPassword).addOnCompleteListener { passwordUpdateTask ->
+                if (passwordUpdateTask.isSuccessful) {
+                    // Password updated successfully
+                    Toast.makeText(this, "Password updated successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Handle password update failure
+                    Log.e(
+                        "ProfileActivity",
+                        "Failed to update password: ${passwordUpdateTask.exception?.message}"
+                    )
+                    Toast.makeText(this, "Failed to update password", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                // Handle email update failure
-                Log.e("ProfileActivity", "Failed to update email: ${emailUpdateTask.exception?.message}")
-                Toast.makeText(this, "Failed to update email", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            // Provided email does not match the current user's email
+            Toast.makeText(
+                this,
+                "Email does not match the current user's email",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }
