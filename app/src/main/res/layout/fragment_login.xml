@@ -8,9 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#C2C6D0"
-        android:backgroundTint="#C2C6D0">
+        android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayoutLogin"
@@ -54,13 +52,14 @@
 
         <Button
             android:id="@+id/submitLogin"
-
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:backgroundTint="#000000"
-            android:text="@string/login"
-            android:textColor="#4961db"
+            android:strokeColor="#000000"
+            android:text="@string/submit"
+            android:textColor="#ffffff"
+            app:backgroundTint="#2B9A17"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputLoginLayout"
             app:layout_constraintStart_toStartOf="@+id/passwordInputLoginLayout"

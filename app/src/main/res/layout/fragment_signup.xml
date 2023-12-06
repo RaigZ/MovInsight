@@ -4,15 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#F3F3F3"
     tools:context=".fragments.SignupFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#E1E1E1"
-        android:backgroundTint="#C2C6D0">
+        android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameLayoutSignup"
@@ -76,13 +73,13 @@
 
         <Button
             android:id="@+id/submitSignup"
-
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:backgroundTint="#070707"
-            android:text="@string/sign_up"
-            android:textColor="#4961db"
+            android:text="@string/submit"
+            android:textColor="#ffffff"
+            app:backgroundTint="#2B9A17"
             app:cornerRadius="5dp"
             app:layout_constraintEnd_toEndOf="@+id/passwordInputSignupLayout"
             app:layout_constraintStart_toStartOf="@+id/passwordInputSignupLayout"

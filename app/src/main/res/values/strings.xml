@@ -16,4 +16,5 @@
     <string name="enter_username">Username</string>
     <string name="add_movie">Add To Watchlist</string>
     <string name="search">Search</string>
+    <string name="submit">Submit</string>
 </resources>

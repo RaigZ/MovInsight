@@ -96,7 +96,6 @@ class MovieInfoActivity : AppCompatActivity() {
                         Toast.makeText(this, "Could not add movie to watchlist", Toast.LENGTH_SHORT).show()
                     }
                 }
-                //sendNotification()
             }
             else
             {
@@ -136,8 +135,6 @@ class MovieInfoActivity : AppCompatActivity() {
                         .into(imageView)
 
                 } else {
-                    //Add toast
-                    // Log the error response
                     Log.e("TestOMDBError", response.errorBody()?.string() ?: "Unknown error")
                     finish()
                 }
@@ -146,7 +143,6 @@ class MovieInfoActivity : AppCompatActivity() {
             override fun onFailure(call: Call<OmdbMovieResponse>, t: Throwable) {
                 Log.d("TestOMDB_FAIL", "message" +  t.message)
             }
-
         })
     }
 

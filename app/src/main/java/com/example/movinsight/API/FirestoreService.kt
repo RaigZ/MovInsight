@@ -225,11 +225,24 @@ class FirestoreService {
             db.collection("users").document(currentUserId)
                 .update("watchlist", ArrayList<String>(currentWatchlist))
                 .addOnSuccessListener {
-                    Log.d("FirebaseService", "Updated watchlist")
+                    Log.d("FirebaseService", "Updated watchlist!")
                     callback(true)
                 }
                 .addOnFailureListener {
-                    Log.d("FirebaseService", "Could not update watchlist")
+                    Log.d("FirebaseService", "Could not update watchlist :(")
+                    callback(false)
+                }
+        }
+
+        fun updateEmail(callback: (Boolean) -> Unit) {
+            db.collection("users").document(currentUserId)
+                .update("email", currentUserEmail)
+                .addOnSuccessListener {
+                    Log.d("FirebaseService", "Updated email!")
+                    callback(true)
+                }
+                .addOnFailureListener {
+                    Log.d("FirebaseService", "Could not update email :(")
                     callback(false)
                 }
         }

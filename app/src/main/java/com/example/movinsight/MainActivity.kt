@@ -43,14 +43,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MovInsightViewModel by viewModels()
     private val userModel: UserViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
-    //private val firebase: FirestoreService.Companion = FirestoreService
-    private val retrofitBuilder by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(APIInterface::class.java)
-    }
 
     override fun onStart() {
         super.onStart()
@@ -67,13 +59,11 @@ class MainActivity : AppCompatActivity() {
             UserDatabase::class.java, "user"
         ).build()
 
-
         //If user is still logged in, display email(*username later),
         //and change visibility for login/signup/sign-out buttons
         auth = Firebase.auth
         val currentUser = auth.currentUser
 
-        //When room is implemented check if currentUser == user in room.
         if(currentUser != null){
             FirestoreService.setCurrentUserId(currentUser.uid)
             findViewById<Button>(R.id.loginButton).visibility = View.GONE
@@ -93,12 +83,8 @@ class MainActivity : AppCompatActivity() {
 
         //UserViewModel, waits for a Map<String, Any> map to be returned
         userModel.selectedItem.observe(this, Observer { item ->
-            //firebase.setUserEmail(item["email"] as String)
-            //Save info in firestore class
             Log.d("Testing firestore service", "${FirestoreService.getUserEmail()}")
             Log.d("Testing firestore service", "${FirestoreService.getCurrentUserId()}")
-            //firebase.setUserEmail("sadf")
-            //firebase.setUserEmail(item["email"])
 
             var usernameField = findViewById<TextView>(R.id.usernameField)
             usernameField.visibility = View.VISIBLE
@@ -115,11 +101,6 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("UserViewModel", "$item")
         })
-
-        //API service for IMDB, was testing top10, and search movies
-        val imdbAPI = APIService.imdbAPI
-        //top10(imdbAPI)
-        //searchMovie(imdbAPI)
 
         changeFragment(DisplayFragment)
 
@@ -153,21 +134,6 @@ class MainActivity : AppCompatActivity() {
                 usernameField.text = ""
             }
         }
-
-        //Used for the bottom nav that will be implemented
-        /*findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
-            when(item.itemId){
-                R.id.ic_api -> {
-                    changeFragment(APIFragment)
-                    true
-                }
-                R.id.ic_display -> {
-                    changeFragment(DisplayFragment)
-                    true
-                }
-                else -> false
-            }
-        }*/
 
         //val settingsActivity = SettingsActivity()
         val homeActivity = MainActivity()
@@ -245,59 +211,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, activity::class.java))
     }
 
-    /*
-    * An example request of imdbs search api, remove spaces in the movie/show name
-    * this doesn't need to be in a function.
-    * */
-    private fun searchMovie(api: APIInterface, adapter: RVAdapter) {
-        val data = api.searchIMDB("Lordoftherings")
-        data.enqueue(object: Callback<SearchMovieResponse> {
-            override fun onResponse(
-                call: Call<SearchMovieResponse>,
-                response: Response<SearchMovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    Log.d("ApiResponse", "${apiResponse}")
-                    apiResponse?.let {
-                        adapter.setData(it)
-                    }
-                } else {
-                    // Log the error response
-                    Log.e("ApiResponseError", response.errorBody()?.string() ?: "Unknown error")
-                }
-            }
-
-            override fun onFailure(call: Call<SearchMovieResponse>, t: Throwable) {
-                Log.d("APIFAIL", "message" +  t.message)
-            }
-        })
-
-    }
-
-    /*
-    * An example request of imdbs top 10 movies,
-    * this doesn't need to be in a function.
-    * */
-    private fun top10(api: APIInterface) {
-        val data = api.getTop10()
-        data.enqueue(object: Callback<TopMovieResponse> {
-            override fun onResponse(call: Call<TopMovieResponse>, response: Response<TopMovieResponse>) {
-                if (response.isSuccessful) {
-                    val apiResponse = response.body()
-                    Log.d("ApiResponse", "${apiResponse}")
-                } else {
-                    // Log the error response
-                    Log.e("ApiResponseError", response.errorBody()?.string() ?: "Unknown error")
-                }
-            }
-
-            override fun onFailure(call: Call<TopMovieResponse>, t: Throwable) {
-                Log.d("APIFAIL", "message" +  t.message)
-            }
-        })
-    }
-
     // Note to self: The database only opens when a change is made
     // Testing the Room database
     private suspend fun insertUserToRoomDB(db : UserDatabase) {
@@ -331,8 +244,6 @@ class MainActivity : AppCompatActivity() {
         val dummy = User("dummy", "dummy", watchlist, "none")
         userDao.insertUser(dummy)
         userDao.deleteUser(userDao.getUser(dummy.username))
-
-
 
         // FOR ADDING MOVIES
         //val watchlist = userDao.getUser("dummy").watchlist
