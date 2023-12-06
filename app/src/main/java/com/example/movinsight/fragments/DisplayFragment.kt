@@ -112,7 +112,7 @@ class DisplayFragment : Fragment() {
                 //Log.d("Inside display fragment", "${task.documents.get(0)}")
                 if(task.isEmpty){
 
-                    Toast.makeText(context, "Query empty", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(context, "Query empty", Toast.LENGTH_LONG).show()
                 } else {
                     var data = mutableListOf<searchItem>()
                     for(element in task){

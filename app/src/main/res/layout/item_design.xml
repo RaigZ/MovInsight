@@ -20,36 +20,29 @@
         android:id="@+id/tvtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-black" />
 
 
     <TextView
         android:id="@+id/tvyear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-black" />
 
     <TextView
         android:id="@+id/tvstars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light" />
+        android:fontFamily="sans-serif-black" />
 
     <TextView
         android:id="@+id/tvq"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light" />
-<!-- Unless some plugin or additional feature needs the
-url from the xml
-    <TextView
-        android:id="@+id/imageURL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    -->
+        android:fontFamily="sans-serif-black" />
     <View
         android:layout_width="match_parent"
         android:layout_height="1sp"
-        android:background="#FFFDFD" />
+        android:background="#f2f2f2" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

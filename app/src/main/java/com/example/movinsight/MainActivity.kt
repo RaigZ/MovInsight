@@ -73,18 +73,12 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         val currentUser = auth.currentUser
 
-        // We will have the logo displayed so that its not just an empty homescreen
-        findViewById<FragmentContainerView>(R.id.fContainer).visibility = View.GONE
-
-
         //When room is implemented check if currentUser == user in room.
         if(currentUser != null){
             FirestoreService.setCurrentUserId(currentUser.uid)
-            findViewById<FragmentContainerView>(R.id.fContainer).visibility = View.VISIBLE // have the list of movies show
             findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
             findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.welcome).visibility = View.GONE // welcome message is gone
             //var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
             //usernameField.visibility = View.VISIBLE
             //usernameField.text = auth.currentUser!!.email.toString()
@@ -93,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         //Creating fragment instances
-        val APIFragment = ApiFragment()
         val DisplayFragment = DisplayFragment()
         val SignupFragment = SignupFragment()
         val LoginFragment = LoginFragment ()
@@ -181,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         val profileActivity = ProfileActivity()
         val watchlistActivity = WatchlistActivity()
 
+//        findViewById<BottomNavigationView>(R.id.bottom_nav).setItemIconTintList(null)
         findViewById<BottomNavigationView>(R.id.bottom_nav).setOnItemSelectedListener { item ->
             when(item.itemId) {
                 /*R.id.ic_api -> {
