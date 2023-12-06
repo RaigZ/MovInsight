@@ -56,8 +56,6 @@ class MovieInfoActivity : AppCompatActivity() {
         }
 
 
-
-        // NOTIFICATION
         fun createNotificationChannel() {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel: NotificationChannel = NotificationChannel("C10", "watchlistNotify", NotificationManager.IMPORTANCE_DEFAULT).apply {
@@ -70,7 +68,7 @@ class MovieInfoActivity : AppCompatActivity() {
         fun showAlert(title: String) {
             AlertDialog.Builder(this)
                 .setTitle("New watchlist item")
-                .setMessage("$title has been added to your watchlist.")
+                .setMessage("The movie title \"$title\" has been added to your watchlist.")
                 .setPositiveButton("Okay"){_,_ ->}
                 .show()
         }
