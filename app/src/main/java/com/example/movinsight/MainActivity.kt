@@ -223,13 +223,14 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+        /*
         // ROOM TEST - CLICK TO ADD USER TO DB
         findViewById<Button>(R.id.bAddToRoom).setOnClickListener {
             lifecycleScope.launch { // coroutine on Main
                 insertUserToRoomDB(db)
             }
         }
-
+        */
     }
 
     private fun changeFragment(fragment: Fragment) {
