@@ -12,6 +12,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
@@ -71,13 +73,18 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         val currentUser = auth.currentUser
 
+        // We will have the logo displayed so that its not just an empty homescreen
+        findViewById<FragmentContainerView>(R.id.fContainer).visibility = View.GONE
+
+
         //When room is implemented check if currentUser == user in room.
         if(currentUser != null){
             FirestoreService.setCurrentUserId(currentUser.uid)
-
+            findViewById<FragmentContainerView>(R.id.fContainer).visibility = View.VISIBLE // have the list of movies show
             findViewById<Button>(R.id.loginButton).visibility = View.GONE
             findViewById<Button>(R.id.signupButton).visibility = View.GONE
             findViewById<Button>(R.id.signoutButton).visibility = View.VISIBLE
+            findViewById<TextView>(R.id.welcome).visibility = View.GONE // welcome message is gone
             //var usernameField = findViewById<TextView>(R.id.usernameField) //.visibility = View.VISIBLE
             //usernameField.visibility = View.VISIBLE
             //usernameField.text = auth.currentUser!!.email.toString()
