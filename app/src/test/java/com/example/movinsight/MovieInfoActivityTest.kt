@@ -20,12 +20,12 @@ class MovieInfoActivityTest
 
         //test fot these elements existance: if they return null rather than
         //throw error, they exist.
-        val id = mock.findViewById<TextView>(R.id.showId)
-        assertNull(id)
-        val userId = mock.findViewById<TextView>(R.id.showId)
-        assertNull(userId)
-        val title = mock.findViewById<TextView>(R.id.showId)
-        assertNull(title)
+        val add = mock.findViewById<TextView>(R.id.addMovie)
+        assertNull(add)
+        val image = mock.findViewById<TextView>(R.id.movieImage)
+        assertNull(image)
+        val title = mock.findViewById<TextView>(R.id.movieList)
+        assertNull(image)
     }
 
 

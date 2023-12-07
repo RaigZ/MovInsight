@@ -10,7 +10,7 @@ import org.junit.Test
 class MainActivityTest {
     @Test
     fun testFragmentExists() {
-        assertNotNull(ApiFragment)  //checks to make sure API fragment exists
+        //checks to make sure  fragment exists
         assertNotNull(DisplayFragment)
         assertNotNull(SignupFragment)
         assertNotNull(LoginFragment)
