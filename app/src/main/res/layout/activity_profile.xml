@@ -5,15 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#8A8A8A"
-    android:backgroundTint="#9949515B"
+    android:background="#ffff"
+    android:backgroundTint="#f2f2f2"
     android:orientation="vertical"
     tools:context=".ProfileActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:background="#303538"
+        android:background="#d9d9d9"
         android:padding="20dp">
 
         <Button
@@ -65,7 +65,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:includeFontPadding="false"
-            android:text="Ethan E"
+            android:text="TextView"
             android:textColor="#000"
             android:textSize="20sp" />
 

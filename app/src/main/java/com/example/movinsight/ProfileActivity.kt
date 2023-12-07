@@ -12,6 +12,7 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var emailProfileLayout: TextInputLayout
     private lateinit var passwordProfileLayout: TextInputLayout
+    private lateinit var usernameProfile: TextView
     private lateinit var updateButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +43,8 @@ class ProfileActivity : AppCompatActivity() {
 
         emailProfileLayout = findViewById(R.id.email_profile)
         passwordProfileLayout = findViewById(R.id.password_profile)
+        usernameProfile = findViewById(R.id.fullname_field)
+        usernameProfile.text = FirestoreService.getUsername()
         updateButton = findViewById(R.id.update_button)
 
         findViewById<Button>(R.id.back_button).setOnClickListener {
