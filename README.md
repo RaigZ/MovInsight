@@ -7,14 +7,7 @@
 **MovInsight** is a Kotlin-based Android movie app that helps users to explore and manage a list of movies.
 
 ## Screenshots
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/home.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/search-results.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/search-showcase1.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/search-showcase2.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/add-watchlist-item.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/watchlist-showcase.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/remove-watchlist-item.png" height = 277 width = 135>
-<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/docs/screenshots/profile.png" height = 277 width = 135>
+<img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/home.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/search-results.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/search-showcase1.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/search-showcase2.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/add-watchlist-item.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/watchlist-showcase.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/remove-watchlist-item.png" height = 277 width = 135> <img src="https://raw.githubusercontent.com/RaigZ/MovInsight/main/docs/screenshots/profile.png" height = 277 width = 135>
 
 ## Features
 * Login and signup to distinguish between users and their watchlist items
